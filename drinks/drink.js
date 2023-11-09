@@ -4,6 +4,9 @@ class Drink {
 
   constructor(name, price) {
     this.name = name;
+    if (price < 0) {
+      throw Error("INVALID_PRICE");
+    }
     this.price = price;
   }
 
@@ -16,10 +19,6 @@ class Drink {
   setName(newName) {
     this.name = newName;
   }
-  setPrice(newPrice) {
-    if (newPrice < 0) {
-      throw Error("INVALID_PRICE");
-    }
-    this.price = newPrice;
-  }
 }
+
+module.exports = Drink;
