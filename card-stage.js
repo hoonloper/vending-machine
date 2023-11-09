@@ -77,7 +77,6 @@ class CardStage {
   }
 
   run() {
-    console.log("카드 스테이지 진입");
     this.logMessage();
   }
 
