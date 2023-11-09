@@ -11,7 +11,8 @@ readline.on("close", () => {
 
 // TODO: 사용된 모든 console.log 바꾸기
 class Application {
-  START_MESSAGE = "안녕하세요. 저희 자판기를 찾아주셔서 감사합니다.";
+  START_MESSAGE =
+    "안녕하세요. 저희 자판기를 찾아주셔서 감사합니다.\n구매 희망 - '구매', 나가기 - '끝' 입력";
   END_MESSAGE = "이용해 주셔서 감사합니다.";
   ERROR_MAPPER = {
     NOT_FOUND: {
@@ -23,20 +24,25 @@ class Application {
   run() {
     console.log(this.START_MESSAGE);
     const launcher = new Launcher();
+    const sendEndMessage = () => {
+      console.log(this.END_MESSAGE);
+      readline.close();
+    };
 
     readline.on("line", (input) => {
-      if (input === "exit") {
-        console.log(this.END_MESSAGE);
-        readline.close();
+      if (input === "끝") {
+        sendEndMessage();
       }
-      console.log("입력 : " + input);
+      console.log("\n입력: " + input);
 
       launcher.setCommand(input);
       try {
         launcher.validCommand(input);
-        launcher.run();
+        const end = launcher.run() ?? null;
+        if (end === "END") {
+          sendEndMessage();
+        }
       } catch (error) {
-        console.log(error);
         const [type, message] = error.message.split(":");
 
         console.log(
@@ -46,5 +52,5 @@ class Application {
     });
   }
 }
-const app = new Application(readlineLib);
+const app = new Application();
 app.run();
