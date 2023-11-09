@@ -34,8 +34,8 @@ class Launcher {
 
   // 스테이지가 진행중이라면 명령어를 주입해준다.
   runInprogress() {
-    const isDone = this.stage.do(this.command);
-    this.status = isDone ? "DONE" : this.status;
+    const response = this.stage.do(this.command);
+    this.status = [null, undefined].includes(response) ? this.status : "DONE";
   }
 
   // 스테이지가 완료되면 다음 스테이지를 설정한다.

@@ -37,7 +37,7 @@ class Application {
 
       launcher.setCommand(input);
       try {
-        launcher.validCommand(input);
+        // launcher.validCommand(input); 완성되면 허용 키워드 입력해야 함
         const end = launcher.run() ?? null;
         if (end === "END") {
           sendEndMessage();
