@@ -1,7 +1,12 @@
 const StageManager = require("./stage-manager");
 
 class Launcher {
-  STAGE_MAPPER = { 구매: { key: "DRINK" } };
+  STAGE_MAPPER = {
+    구매: { key: "DRINK" },
+    카드: { key: "CARD" },
+    현금: { key: "CASH" },
+    결제: { key: "PAYMENT" },
+  };
   command;
   status = "DONE";
   stage;
