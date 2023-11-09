@@ -5,6 +5,9 @@ class DrinkManager {
 
   constructor() {
     this.drinkList = [];
+    this.addDrink("콜라", 1100);
+    this.addDrink("물", 600);
+    this.addDrink("커피", 700);
   }
 
   getDrinkNameList() {
@@ -20,6 +23,9 @@ class DrinkManager {
       }
       return names;
     }, []);
+  }
+  getDrinkList() {
+    return [...this.drinkList];
   }
   addDrink(name, price) {
     this.drinkList.push(new Drink(name, price));

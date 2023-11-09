@@ -23,7 +23,6 @@ class Application {
   run() {
     console.log(this.START_MESSAGE);
     const launcher = new Launcher();
-    launcher.initDrinks();
 
     readline.on("line", (input) => {
       if (input === "exit") {
@@ -35,10 +34,14 @@ class Application {
       launcher.setCommand(input);
       try {
         launcher.validCommand(input);
+        launcher.run();
       } catch (error) {
+        console.log(error);
         const [type, message] = error.message.split(":");
 
-        console.log(ERROR_MAPPER?.[type]?.[message] ?? "다시 시도해 주세요.");
+        console.log(
+          this.ERROR_MAPPER?.[type]?.[message] ?? "다시 시도해 주세요."
+        );
       }
     });
   }

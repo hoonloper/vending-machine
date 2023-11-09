@@ -1,11 +1,18 @@
-const DrinkManager = require("./drinks/drink-manager");
+const StageManager = require("./stage-manager");
 
 class Launcher {
   command;
-  drinkManager = new DrinkManager();
+  stages = ["DRINK", "PAYMENT", "DONE"];
+  stageIndex = 0;
+
+  run() {
+    const stageManager = new StageManager(this.stages[this.stageIndex]);
+    const stage = stageManager.getStage();
+    stage.run();
+  }
 
   getAllowedCommand() {
-    return ["끝", "콜라", "물", "커피", "현금", "카드"];
+    return ["DRINK", "콜라", "물", "커피", "현금", "카드"];
   }
 
   validCommand() {
@@ -16,12 +23,6 @@ class Launcher {
 
   setCommand(newCommand) {
     this.command = newCommand;
-  }
-
-  initDrinks() {
-    this.drinkManager.addDrink("콜라", 1100);
-    this.drinkManager.addDrink("물", 600);
-    this.drinkManager.addDrink("커피", 700);
   }
 }
 
