@@ -47,8 +47,10 @@ class Launcher {
   runDone() {
     this.validStageMapper();
 
-    const stageManager = new StageManager(this.STAGE_MAPPER[this.command].key);
+    const stageKey = this.STAGE_MAPPER[this.command].key;
+    const stageManager = new StageManager(stageKey);
     const stage = stageManager.getStage();
+
     if (stage === "END") {
       this.status === stage;
       return;
