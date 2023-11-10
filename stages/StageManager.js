@@ -67,6 +67,10 @@ class StageManager {
     }
   }
 
+  initStage() {
+    this.stage = this.stages[MODEL_KEY.DRINK];
+  }
+
   getStatus() {
     return this.status;
   }
