@@ -24,7 +24,6 @@ class CardStage {
       return null;
     }
     const [number, expiredDate, birthDay] = command.split(":");
-    console.log(command);
     this.card = new Card(number, expiredDate, birthDay);
     console.log(`고객님의 카드 정보는 다음과 같습니다.`);
     console.log("------------------------------------");

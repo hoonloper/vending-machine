@@ -27,6 +27,9 @@ class Drink {
   setName(newName) {
     this.name = newName;
   }
+  decreaseCount() {
+    this.count--;
+  }
   sold() {
     if (this.count <= 0) {
       return null;

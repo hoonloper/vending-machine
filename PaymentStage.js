@@ -24,6 +24,7 @@ class PaymentStage {
       throw Error("INVALID:PAYMENT");
     }
   }
+
   do(command) {
     if (command !== "진행") {
       console.log("잘못된 입력입니다.");
@@ -32,6 +33,34 @@ class PaymentStage {
       );
       return null;
     }
+
+    return this.payWith(this.type);
+  }
+
+  payWith(type) {
+    const drinkPrice = this.drink.getPrice();
+    let change = 0;
+    if (type === "CARD") {
+      this.card.increase(drinkPrice);
+      change = this.card.getPrice();
+    } else if (type === "CASH") {
+      if (!this.cash.checkPriceRange(drinkPrice)) {
+        console.log(
+          "금액이 충분하지 않습니다. 충분한 금액을 입력해 주시기 바랍니다."
+        );
+        throw Error("FAIL:NOT_ENOUGH");
+      }
+      this.cash.decrease(drinkPrice);
+      change = this.cash.getPrice();
+    }
+    this.drink.decreaseCount();
+    console.log("결제가 완료되었습니다.");
+    console.log("\n--------------------------------------\n");
+    console.log("결제 내역");
+    console.log(`- 금액: ${drinkPrice}원`);
+    console.log(`- 잔액: ${change}원`);
+    console.log("\n======================================\n");
+    return "COMPLETE";
   }
 
   run() {
@@ -59,7 +88,7 @@ class PaymentStage {
       console.log("- 타입: 현금");
       console.log(`- 입력한 금액: ${this.cash.getPrice()}원`);
       paymentPrice = this.cash.getPrice() - this.drink.getPrice();
-      paymentMessage = `[${this.cash.getPrice()}(현재 금액) - ${this.drink.getPrice()}(음료)]`;
+      paymentMessage = `[${this.cash.getPrice()}원(현재 금액) - ${this.drink.getPrice()}원(음료)]`;
     }
     console.log("\n--------------------------------------\n");
     console.log(`음료 정보`);

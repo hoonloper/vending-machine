@@ -19,8 +19,7 @@ class Launcher {
     }
     switch (this.status) {
       case "IN_PROGRESS": {
-        this.runInprogress();
-        break;
+        return this.runInprogress();
       }
       case "DONE": {
         this.runDone();
@@ -34,6 +33,9 @@ class Launcher {
       }
     }
   }
+  completeLauncher() {
+    return "COMPLETE";
+  }
 
   closeLauncher() {
     return "END";
@@ -42,7 +44,9 @@ class Launcher {
   // 스테이지가 진행중이라면 명령어를 주입해준다.
   runInprogress() {
     const response = this.stage.do(this.command);
-
+    if (response === "COMPLETE") {
+      return this.completeLauncher();
+    }
     // 스테이지의 값을 응답받으면 완료처리한다.
     if (![null, undefined].includes(response)) {
       this.status = "DONE";

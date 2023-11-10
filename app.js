@@ -20,27 +20,46 @@ class Application {
       DRINK: "찾는 음료가 없습니다.",
     },
   };
+  RETRY_MESSAGE = "다시 이용하시려면 '이용'을 입력해 주세요.";
 
   run() {
-    console.log(this.START_MESSAGE);
-    const launcher = new Launcher();
+    const startMessage = this.START_MESSAGE;
+    const endMessage = this.END_MESSAGE;
+    const retryMeesage = this.RETRY_MESSAGE;
+    console.log(startMessage);
     const sendEndMessage = () => {
-      console.log(this.END_MESSAGE);
+      console.log(endMessage);
       readline.close();
     };
 
+    let launcher = new Launcher();
+    let status = null;
+
     readline.on("line", (input) => {
-      if (input === "끝") {
+      if (input === "끝" || status === "END") {
         sendEndMessage();
+      }
+      if (status === "COMPLETE") {
+        if (input !== "이용") {
+          sendEndMessage();
+          return;
+        }
+        status = null;
+        launcher = new Launcher();
+        console.log(startMessage);
+        return;
       }
       console.log("\n입력: " + input);
 
       launcher.setCommand(input);
       try {
         // launcher.validCommand(input); 완성되면 허용 키워드 입력해야 함
-        const end = launcher.run() ?? null;
-        if (end === "END") {
-          sendEndMessage();
+        status = launcher.run() ?? null;
+
+        if (status === "COMPLETE") {
+          console.log(endMessage);
+          console.log(retryMeesage);
+          return;
         }
       } catch (error) {
         console.log(error);

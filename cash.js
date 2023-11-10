@@ -18,6 +18,9 @@ class Cash {
     }
     this.price -= price;
   }
+  checkPriceRange(price) {
+    return typeof price === "number" && price >= 0 && this.price - price >= 0;
+  }
 }
 
 module.exports = Cash;
