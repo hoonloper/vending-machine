@@ -1,5 +1,5 @@
 const log = (message) => {
-  process.stdout.write(message);
+  process.stdout.write(message + "\n");
 };
 
 const validString = (value) => typeof value === "string";
@@ -20,7 +20,7 @@ const validStringRange = (value, minLength = 1, maxLength = 20) =>
   value.length >= minLength &&
   value.length <= maxLength;
 
-export {
+module.exports = {
   log,
   validString,
   validNumber,

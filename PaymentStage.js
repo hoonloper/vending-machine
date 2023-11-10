@@ -70,7 +70,7 @@ class PaymentStage {
   logMessage() {
     console.log("\n======================================\n");
     console.log("결제 수단");
-    let paymentPrice = 0;
+    let paymentChange = 0;
     let paymentMessage = "";
     // 카드 결제 메시지
     if (this.type === "CARD") {
@@ -80,14 +80,14 @@ class PaymentStage {
       );
       console.log(`- 카드 번호: ${formattedNumber}`);
       console.log(`- 현재까지 사용한 금액: ${this.card.getPrice()}원`);
-      paymentPrice = this.drink.getPrice();
+      paymentChange = this.drink.getPrice();
       paymentMessage = `[${this.drink.getPrice()}원(카드사에 등록된 결제일에 결제될 예정)]`;
     }
     // 현금 결제 메시지
     if (this.type === "CASH") {
       console.log("- 타입: 현금");
       console.log(`- 입력한 금액: ${this.cash.getPrice()}원`);
-      paymentPrice = this.cash.getPrice() - this.drink.getPrice();
+      paymentChange = this.cash.getPrice() - this.drink.getPrice();
       paymentMessage = `[${this.cash.getPrice()}원(현재 금액) - ${this.drink.getPrice()}원(음료)]`;
     }
     console.log("\n--------------------------------------\n");
@@ -97,7 +97,8 @@ class PaymentStage {
     console.log(`- 개수: ${this.drink.getCount()}개`);
     console.log("\n--------------------------------------\n");
     console.log("결제 내역");
-    console.log(`- 금액: ${paymentPrice}원`);
+    console.log(`- 금액: ${this.drink.getPrice()}원`);
+    console.log(`- 잔액: ${paymentChange}원`);
     console.log(paymentMessage);
     console.log("\n======================================\n");
     console.log(

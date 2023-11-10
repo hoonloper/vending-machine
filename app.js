@@ -1,5 +1,6 @@
 const readlineLib = require("readline");
 const Launcher = require("./Launcher");
+const { log } = require("./utils");
 
 const readline = readlineLib.createInterface({
   input: process.stdin,
@@ -20,15 +21,16 @@ class Application {
       DRINK: "찾는 음료가 없습니다.",
     },
   };
-  RETRY_MESSAGE = "다시 이용하시려면 '이용'을 입력해 주세요.";
+  RETRY_MESSAGE =
+    "다시 이용하시려면 '이용'을 입력해 주시고, 끝내려면 '끝'을 입력해 주세요.";
 
   run() {
     const startMessage = this.START_MESSAGE;
     const endMessage = this.END_MESSAGE;
     const retryMeesage = this.RETRY_MESSAGE;
-    console.log(startMessage);
+    log(startMessage);
     const sendEndMessage = () => {
-      console.log(endMessage);
+      log(endMessage);
       readline.close();
     };
 
@@ -46,10 +48,10 @@ class Application {
         }
         status = null;
         launcher = new Launcher();
-        console.log(startMessage);
+        log(startMessage);
         return;
       }
-      console.log("\n입력: " + input);
+      log("\n입력: " + input);
 
       launcher.setCommand(input);
       try {
@@ -57,17 +59,15 @@ class Application {
         status = launcher.run() ?? null;
 
         if (status === "COMPLETE") {
-          console.log(endMessage);
-          console.log(retryMeesage);
+          log(endMessage);
+          log(retryMeesage);
           return;
         }
       } catch (error) {
-        console.log(error);
+        log(error);
         const [type, message] = error.message.split(":");
 
-        console.log(
-          this.ERROR_MAPPER?.[type]?.[message] ?? "다시 시도해 주세요."
-        );
+        log(this.ERROR_MAPPER?.[type]?.[message] ?? "다시 시도해 주세요.");
       }
     });
   }
