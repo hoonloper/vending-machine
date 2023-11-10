@@ -1,6 +1,6 @@
+const { MODEL_KEY, STATUS } = require("../common/constant");
 const Card = require("../models/Card");
 const Cash = require("../models/Cash");
-const Drink = require("../models/Drink");
 
 class PaymentStage {
   drink = null;
@@ -23,10 +23,10 @@ class PaymentStage {
   payWith(type) {
     const drinkPrice = this.drink.getPrice();
     let change = 0;
-    if (type === "CARD") {
+    if (type === MODEL_KEY.CARD) {
       this.card.increase(drinkPrice);
       change = this.card.getPrice();
-    } else if (type === "CASH") {
+    } else if (type === MODEL_KEY.CASH) {
       if (!this.cash.checkPriceRange(drinkPrice)) {
         console.log(
           "금액이 충분하지 않습니다. 충분한 금액을 입력해 주시기 바랍니다."
@@ -43,7 +43,7 @@ class PaymentStage {
     console.log(`- 금액: ${drinkPrice}원`);
     console.log(`- 잔액: ${change}원`);
     console.log("\n======================================\n");
-    return "COMPLETE";
+    return STATUS.COMPLETE;
   }
 
   run() {
@@ -59,10 +59,10 @@ class PaymentStage {
     this.drink = selectedList[0];
     if (selectedList[1] instanceof Card) {
       this.card = selectedList[1];
-      this.type = "CARD";
+      this.type = MODEL_KEY.CARD;
     } else if (selectedList[1] instanceof Cash) {
       this.cash = selectedList[1];
-      this.type = "CASH";
+      this.type = MODEL_KEY.CASH;
     } else {
       throw Error("INVALID:PAYMENT");
     }
@@ -74,7 +74,7 @@ class PaymentStage {
     let paymentChange = 0;
     let paymentMessage = "";
     // 카드 결제 메시지
-    if (this.type === "CARD") {
+    if (this.type === MODEL_KEY.CARD) {
       console.log("- 타입: 카드");
       const formattedNumber = this.card.formatNumber(
         this.card.blurNumber(this.card.getNumber())
@@ -85,7 +85,7 @@ class PaymentStage {
       paymentMessage = `[${this.drink.getPrice()}원(카드사에 등록된 결제일에 결제될 예정)]`;
     }
     // 현금 결제 메시지
-    if (this.type === "CASH") {
+    if (this.type === MODEL_KEY.CASH) {
       console.log("- 타입: 현금");
       console.log(`- 입력한 금액: ${this.cash.getPrice()}원`);
       paymentChange = this.cash.getPrice() - this.drink.getPrice();

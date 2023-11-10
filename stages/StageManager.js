@@ -2,26 +2,21 @@ const DrinkStage = require("./DrinkStage");
 const CardStage = require("./CardStage");
 const CashStage = require("./CashStage");
 const PaymentStage = require("./PaymentStage");
-
-const STATUS = {
-  IN_PROGRESS: "IN_PROGRESS",
-  DONE: "DONE",
-  COMPLETE: "COMPLETE",
-};
+const { STATUS, MODEL_KEY } = require("../common/constant");
 
 class StageManager {
   static STAGE_MAPPER = {
-    카드: { key: "CARD" },
-    현금: { key: "CASH" },
-    결제: { key: "PAYMENT" },
+    카드: { key: MODEL_KEY.CARD },
+    현금: { key: MODEL_KEY.CASH },
+    결제: { key: MODEL_KEY.PAYMENT },
   };
 
   stages = null;
   stage = null;
-  status = "IN_PROGRESS";
+  status = STATUS.IN_PROGRESS;
   selectedList = [];
 
-  constructor(type = "DRINK") {
+  constructor(type = MODEL_KEY.DRINK) {
     const stages = {
       DRINK: new DrinkStage(),
       CARD: new CardStage(),
@@ -52,7 +47,7 @@ class StageManager {
   nextStage(key) {
     this.stage = this.stages[key];
 
-    if (key === "PAYMENT") {
+    if (key === MODEL_KEY.PAYMENT) {
       this.stage.init(this.selectedList);
     }
 
