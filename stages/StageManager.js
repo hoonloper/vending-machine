@@ -11,9 +11,8 @@ class StageManager {
       CARD: new CardStage(),
       CASH: new CashStage(),
       PAYMENT: new PaymentStage(selectedList),
-      DONE: "",
     };
-    this.stage = stages[type];
+    this.stage = stages[type] ?? null;
   }
 
   getStage() {
