@@ -1,6 +1,11 @@
 const log = (message) => {
   process.stdout.write(message + "\n");
 };
+const logs = (...messages) => {
+  messages.forEach((message) => {
+    log(message);
+  });
+};
 
 const validString = (value) => typeof value === "string";
 
@@ -22,6 +27,7 @@ const validStringRange = (value, minLength = 1, maxLength = 20) =>
 
 module.exports = {
   log,
+  logs,
   validString,
   validNumber,
   validFilledString,

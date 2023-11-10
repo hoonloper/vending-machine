@@ -8,23 +8,6 @@ class PaymentStage {
   cash = null;
   type = null;
 
-  constructor(selectedList) {
-    if (!Array.isArray(selectedList) || selectedList.length !== 2) {
-      return null;
-    }
-
-    this.drink = selectedList[0];
-    if (selectedList[1] instanceof Card) {
-      this.card = selectedList[1];
-      this.type = "CARD";
-    } else if (selectedList[1] instanceof Cash) {
-      this.cash = selectedList[1];
-      this.type = "CASH";
-    } else {
-      throw Error("INVALID:PAYMENT");
-    }
-  }
-
   do(command) {
     if (command !== "진행") {
       console.log("잘못된 입력입니다.");
@@ -55,7 +38,7 @@ class PaymentStage {
     }
     this.drink.decreaseCount();
     console.log("결제가 완료되었습니다.");
-    console.log("\n--------------------------------------\n");
+    console.log("\n======================================\n");
     console.log("결제 내역");
     console.log(`- 금액: ${drinkPrice}원`);
     console.log(`- 잔액: ${change}원`);
@@ -65,6 +48,24 @@ class PaymentStage {
 
   run() {
     this.logMessage();
+  }
+
+  init(selectedList) {
+    console.log("init ", selectedList);
+    if (!Array.isArray(selectedList) || selectedList.length !== 2) {
+      return null;
+    }
+
+    this.drink = selectedList[0];
+    if (selectedList[1] instanceof Card) {
+      this.card = selectedList[1];
+      this.type = "CARD";
+    } else if (selectedList[1] instanceof Cash) {
+      this.cash = selectedList[1];
+      this.type = "CASH";
+    } else {
+      throw Error("INVALID:PAYMENT");
+    }
   }
 
   logMessage() {
