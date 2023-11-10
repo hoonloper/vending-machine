@@ -1,4 +1,4 @@
-const StageManager = require("./StageManager");
+const StageManager = require("./stages/StageManager");
 
 class Launcher {
   // TODO: 네이밍 수정

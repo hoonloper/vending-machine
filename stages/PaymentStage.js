@@ -1,6 +1,6 @@
-const Card = require("./Card");
-const Cash = require("./Cash");
-const Drink = require("./drinks/Drink");
+const Card = require("../Card");
+const Cash = require("../Cash");
+const Drink = require("../drinks/Drink");
 
 class PaymentStage {
   drink = null;

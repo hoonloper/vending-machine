@@ -22,7 +22,7 @@ class Application {
     },
   };
   RETRY_MESSAGE =
-    "다시 이용하시려면 '이용'을 입력해 주시고, 끝내려면 '끝'을 입력해 주세요.";
+    "다시 이용하시려면 '구매'를 입력해 주시고, 끝내려면 '끝'을 입력해 주세요.";
 
   run() {
     const startMessage = this.START_MESSAGE;

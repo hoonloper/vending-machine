@@ -1,4 +1,4 @@
-const Card = require("./Card");
+const Card = require("../Card");
 
 class CardStage {
   card;
