@@ -1,15 +1,16 @@
 const StageManager = require("./stage-manager");
 
 class Launcher {
+  selectedFromStage = [];
   STAGE_MAPPER = {
     구매: { key: "DRINK" },
     카드: { key: "CARD" },
     현금: { key: "CASH" },
     결제: { key: "PAYMENT" },
   };
-  command;
+  command = null;
   status = "DONE";
-  stage;
+  stage = null;
 
   run() {
     if (this.command === "끝") {
@@ -40,7 +41,13 @@ class Launcher {
   // 스테이지가 진행중이라면 명령어를 주입해준다.
   runInprogress() {
     const response = this.stage.do(this.command);
-    this.status = [null, undefined].includes(response) ? this.status : "DONE";
+
+    // 스테이지의 값을 응답받으면 완료처리한다.
+    if (![null, undefined].includes(response)) {
+      this.status = "DONE";
+      this.selectedFromStage.push(response);
+      console.log(this.selectedFromStage);
+    }
   }
 
   // 스테이지가 완료되면 다음 스테이지를 설정한다.
@@ -50,7 +57,6 @@ class Launcher {
     const stageKey = this.STAGE_MAPPER[this.command].key;
     const stageManager = new StageManager(stageKey);
     const stage = stageManager.getStage();
-
     if (stage === "END") {
       this.status === stage;
       return;

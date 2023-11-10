@@ -6,6 +6,8 @@ class CashStage {
   do(command) {
     if (command === "진행") {
       if (this.cash instanceof Cash) {
+        console.log("현금이 정상적으로 입력되었습니다.");
+        console.log("결제를 진행하시려면 '결제'를 입력해 주세요.");
         return this.cash;
       }
       console.log("입력된 현금이 없습니다.");

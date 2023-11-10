@@ -5,6 +5,8 @@ class CardStage {
   do(command) {
     if (command === "네") {
       if (this.card instanceof Card) {
+        console.log("카드 등록이 정상적으로 완료되었습니다.");
+        console.log("결제를 진행하시려면 '결제'를 입력해 주세요.");
         return this.card;
       }
       console.log("카드 정보가 존재하지 않습니다.");
