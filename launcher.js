@@ -18,7 +18,6 @@ class Launcher {
 
   static newLauncher() {
     this.recordStageManager();
-    console.log(this.stageManagerHistory);
     return this;
   }
 }

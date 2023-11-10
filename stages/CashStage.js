@@ -1,4 +1,5 @@
 const { COMMAND } = require("../common/constant");
+const { log } = require("../common/utils");
 const Cash = require("../models/Cash");
 
 class CashStage {
@@ -7,16 +8,16 @@ class CashStage {
   do(command) {
     if (command === COMMAND.IN_PROGRESS) {
       if (this.cash instanceof Cash) {
-        console.log("현금이 정상적으로 입력되었습니다.");
-        console.log(`결제를 진행하시려면 '${COMMAND.PAY}'를 입력해 주세요.`);
+        log("현금이 정상적으로 입력되었습니다.");
+        log(`결제를 진행하시려면 '${COMMAND.PAY}'를 입력해 주세요.`);
         return this.cash;
       }
-      console.log("입력된 현금이 없습니다.");
+      log("입력된 현금이 없습니다.");
       return null;
     }
 
     if (!this.validCash(command)) {
-      console.log("허용되지 않은 금액 단위입니다!");
+      log("허용되지 않은 금액 단위입니다!");
       this.logMessage();
       return null;
     }
@@ -24,12 +25,12 @@ class CashStage {
     const cash = Number(command);
     if (this.cash instanceof Cash) {
       this.cash.increase(cash);
-      console.log("더해진 금액: ", this.cash.getPrice());
-      console.log("결제를 진행하시려면 '진행'을 입력해 주세요.");
+      log("더해진 금액: ", this.cash.getPrice());
+      log("결제를 진행하시려면 '진행'을 입력해 주세요.");
       return null;
     }
     this.cash = new Cash(cash);
-    console.log(
+    log(
       `금액 추가 - 새로운 금액 입력\n결제 진행 - '${COMMAND.IN_PROGRESS}' 입력\n환불 - '${COMMAND.END}' 입력`
     );
   }
@@ -50,9 +51,9 @@ class CashStage {
     const message = `허용된 금액 단위는 ${this.ALLOWED_CASH_LIST.map(
       (cash) => `${cash}원`
     ).join(", ")} 입니다.`;
-    console.log(message);
-    console.log("[꼭] 숫자만 입력해 주세요!");
-    console.log("======================================");
+    log(message);
+    log("[꼭] 숫자만 입력해 주세요!");
+    log("======================================");
   }
 }
 

@@ -1,4 +1,5 @@
 const { COMMAND } = require("../common/constant");
+const { log } = require("../common/utils");
 const Card = require("../models/Card");
 
 class CardStage {
@@ -6,11 +7,11 @@ class CardStage {
   do(command) {
     if (command === COMMAND.IN_PROGRESS) {
       if (this.card instanceof Card) {
-        console.log("카드 등록이 정상적으로 완료되었습니다.");
-        console.log("결제를 진행하시려면 '결제'를 입력해 주세요.");
+        log("카드 등록이 정상적으로 완료되었습니다.");
+        log("결제를 진행하시려면 '결제'를 입력해 주세요.");
         return this.card;
       }
-      console.log("카드 정보가 존재하지 않습니다.");
+      log("카드 정보가 존재하지 않습니다.");
       this.logMessage();
       return null;
     }
@@ -26,13 +27,13 @@ class CardStage {
     }
     const [number, expiredDate, birthDay] = command.split(":");
     this.card = new Card(number, expiredDate, birthDay);
-    console.log(`고객님의 카드 정보는 다음과 같습니다.`);
-    console.log("------------------------------------");
-    console.log(`- 카드번호: ${number}`);
-    console.log(`- 만료일: ${expiredDate}`);
-    console.log(`- 생년월일: ${birthDay}`);
-    console.log("------------------------------------");
-    console.log(
+    log(`고객님의 카드 정보는 다음과 같습니다.`);
+    log("------------------------------------");
+    log(`- 카드번호: ${number}`);
+    log(`- 만료일: ${expiredDate}`);
+    log(`- 생년월일: ${birthDay}`);
+    log("------------------------------------");
+    log(
       `카드 결제 희망 - '${COMMAND.IN_PROGRESS}' 입력\n정보 재입력 희망 - '${COMMAND.RETRY}' 입력\n끝내려면 '${COMMAND.END}' 입력`
     );
   }
@@ -43,19 +44,19 @@ class CardStage {
     }
     const splitedCommand = command.split(":");
     if (splitedCommand.length !== 3) {
-      console.log("잘못 입력된 카드 정보가 존재합니다.");
+      log("잘못 입력된 카드 정보가 존재합니다.");
       return false;
     }
 
     const number = splitedCommand[0];
     if (number.length !== 16 || isNaN(Number(number))) {
-      console.log("카드 번호를 잘못 입력했습니다.");
+      log("카드 번호를 잘못 입력했습니다.");
       return false;
     }
 
     const expired = splitedCommand[1];
     if (!expired.includes("/")) {
-      console.log("만료 일자를 잘못 입력했습니다.");
+      log("만료 일자를 잘못 입력했습니다.");
       return false;
     }
     const splitedExpired = expired.split("/");
@@ -65,13 +66,13 @@ class CardStage {
       splitedExpired[1].length !== 2 ||
       isNaN(Number(splitedExpired[1]))
     ) {
-      console.log("만료 일자를 잘못 입력했습니다.");
+      log("만료 일자를 잘못 입력했습니다.");
       return false;
     }
 
     const birthDay = splitedCommand[2];
     if (birthDay.length !== 6 || isNaN(Number(birthDay))) {
-      console.log("생년월일을 잘못 입력했습니다.");
+      log("생년월일을 잘못 입력했습니다.");
       return false;
     }
 
@@ -83,10 +84,10 @@ class CardStage {
   }
 
   logMessage() {
-    console.log(
+    log(
       "카드번호(16자리), 만료(일/월), 생년월일(6자리)을 ':'로 구분지어 작성해 주세요."
     );
-    console.log("======================================");
+    log("======================================");
   }
 }
 
