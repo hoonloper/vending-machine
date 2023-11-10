@@ -23,7 +23,7 @@ class CashStage {
     const cash = Number(command);
     if (this.cash instanceof Cash) {
       this.cash.increase(cash);
-      console.log("더해진 금액: ", this.cash.getCash());
+      console.log("더해진 금액: ", this.cash.getPrice());
       console.log("결제를 진행하시려면 '진행'을 입력해 주세요.");
       return null;
     }

@@ -43,6 +43,7 @@ class Application {
           sendEndMessage();
         }
       } catch (error) {
+        console.log(error);
         const [type, message] = error.message.split(":");
 
         console.log(

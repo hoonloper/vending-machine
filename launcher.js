@@ -1,7 +1,8 @@
 const StageManager = require("./StageManager");
 
 class Launcher {
-  selectedFromStage = [];
+  // TODO: 네이밍 수정
+  selectedList = [];
   STAGE_MAPPER = {
     구매: { key: "DRINK" },
     카드: { key: "CARD" },
@@ -45,17 +46,15 @@ class Launcher {
     // 스테이지의 값을 응답받으면 완료처리한다.
     if (![null, undefined].includes(response)) {
       this.status = "DONE";
-      this.selectedFromStage.push(response);
-      console.log(this.selectedFromStage);
+      this.selectedList.push(response);
     }
   }
 
   // 스테이지가 완료되면 다음 스테이지를 설정한다.
   runDone() {
     this.validStageMapper();
-
     const stageKey = this.STAGE_MAPPER[this.command].key;
-    const stageManager = new StageManager(stageKey);
+    const stageManager = new StageManager(stageKey, this.selectedList);
     const stage = stageManager.getStage();
     if (stage === "END") {
       this.status === stage;

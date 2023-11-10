@@ -6,7 +6,7 @@ class Cash {
     this.price = price;
   }
 
-  getCash() {
+  getPrice() {
     return this.price;
   }
   increase(price) {
