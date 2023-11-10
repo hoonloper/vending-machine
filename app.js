@@ -1,6 +1,6 @@
 const readlineLib = require("readline");
 const Launcher = require("./Launcher");
-const { log } = require("./utils");
+const { log } = require("./common/utils");
 
 const readline = readlineLib.createInterface({
   input: process.stdin,

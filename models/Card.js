@@ -30,7 +30,7 @@ class Card {
     return this.usedPrice;
   }
 
-  increasePrice(price) {
+  increase(price) {
     if (price < 0) {
       throw Error("INVALID:PRICE");
     }

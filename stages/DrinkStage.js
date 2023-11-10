@@ -12,11 +12,11 @@ class DrinkStage {
     if (this.drinkManager.getDrinkNameList().includes(command)) {
       const drink = this.drinkManager.getDrinkByName(command);
       this.setSelectedDrink(drink);
-      console.log("구매를 희망하면 '네' 아니면 '아니오'를 입력해 주세요.");
-    } else if ("네" === command) {
+      console.log("구매 희망 - '진행'\n다시 선택 - '다시'");
+    } else if ("진행" === command) {
       console.log("결제 수단 선택 - 카드, 현금");
       return this.getSelectedDrink();
-    } else if ("아니오" === command) {
+    } else if ("다시" === command) {
       this.setSelectedDrink(null);
       return null;
     } else {

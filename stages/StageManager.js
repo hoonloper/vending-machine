@@ -4,7 +4,13 @@ const CashStage = require("./CashStage");
 const PaymentStage = require("./PaymentStage");
 
 class StageManager {
-  stage;
+  static STAGE_MAPPER = {
+    구매: { key: "DRINK" },
+    카드: { key: "CARD" },
+    현금: { key: "CASH" },
+    결제: { key: "PAYMENT" },
+  };
+  stage = null;
   constructor(type, selectedList) {
     const stages = {
       DRINK: new DrinkStage(),
@@ -16,7 +22,15 @@ class StageManager {
   }
 
   getStage() {
+    this.stage.run();
     return this.stage;
+  }
+
+  static validStageKey(command) {
+    const hasCommand = Object.keys(StageManager.STAGE_MAPPER).includes(command);
+    if (!hasCommand) {
+      throw Error("NOT_FOUND:COMMAND");
+    }
   }
 }
 

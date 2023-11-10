@@ -3,12 +3,6 @@ const StageManager = require("./stages/StageManager");
 class Launcher {
   // TODO: 네이밍 수정
   selectedList = [];
-  STAGE_MAPPER = {
-    구매: { key: "DRINK" },
-    카드: { key: "CARD" },
-    현금: { key: "CASH" },
-    결제: { key: "PAYMENT" },
-  };
   command = null;
   status = "DONE";
   stage = null;
@@ -56,24 +50,12 @@ class Launcher {
 
   // 스테이지가 완료되면 다음 스테이지를 설정한다.
   runDone() {
-    this.validStageMapper();
-    const stageKey = this.STAGE_MAPPER[this.command].key;
-    const stageManager = new StageManager(stageKey, this.selectedList);
-    const stage = stageManager.getStage();
-    if (stage === "END") {
-      this.status === stage;
-      return;
-    }
-    this.stage = stage;
-    stage.run();
-    this.status = "IN_PROGRESS";
-  }
+    StageManager.validStageKey(this.command);
 
-  validStageMapper() {
-    const hasCommand = Object.keys(this.STAGE_MAPPER).includes(this.command);
-    if (!hasCommand) {
-      throw Error("NOT_FOUND:COMMAND");
-    }
+    const stageKey = StageManager.STAGE_MAPPER[this.command].key;
+    const stageManager = new StageManager(stageKey, this.selectedList);
+    this.stage = stageManager.getStage();
+    this.status = "IN_PROGRESS";
   }
 
   getAllowedCommand() {
