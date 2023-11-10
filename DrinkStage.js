@@ -1,4 +1,4 @@
-const DrinkManager = require("./drinks/drink-manager");
+const DrinkManager = require("./drinks/DrinkManager");
 
 class DrinkStage {
   drinkManager;

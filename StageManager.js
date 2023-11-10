@@ -1,6 +1,6 @@
-const DrinkStage = require("./drink-stage");
-const CardStage = require("./card-stage");
-const CashStage = require("./cash-stage");
+const DrinkStage = require("./DrinkStage");
+const CardStage = require("./CardStage");
+const CashStage = require("./CashStage");
 
 class StageManager {
   stage;

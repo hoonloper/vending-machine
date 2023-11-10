@@ -1,4 +1,4 @@
-const Cash = require("./cash");
+const Cash = require("./Cash");
 
 class CashStage {
   cash;

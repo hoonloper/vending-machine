@@ -1,4 +1,4 @@
-const StageManager = require("./stage-manager");
+const StageManager = require("./StageManager");
 
 class Launcher {
   selectedFromStage = [];
