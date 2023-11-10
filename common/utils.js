@@ -6,6 +6,17 @@ const logs = (...messages) => {
     log(message);
   });
 };
+const logDivider = (thin) => {
+  if (thin) {
+    log(
+      "\n----------------------------------------------------------------------------\n"
+    );
+  } else {
+    log(
+      "\n============================================================================\n"
+    );
+  }
+};
 
 const validString = (value) => typeof value === "string";
 
@@ -28,6 +39,7 @@ const validStringRange = (value, minLength = 1, maxLength = 20) =>
 module.exports = {
   log,
   logs,
+  logDivider,
   validString,
   validNumber,
   validFilledString,

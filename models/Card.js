@@ -15,7 +15,7 @@ class Card {
    * @returns 'xxxx-xxxx-xxxx-xxxx' 형태로 변환
    */
   formatNumber(number) {
-    return number.replace(/(.{4})/g, "$1-");
+    return number.replace(/(.{4})/g, "$1-").slice(0, -1);
   }
   /**
    * @returns 'xxxxxxxx****xxxx' 형태로 블러
