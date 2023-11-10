@@ -1,4 +1,4 @@
-const Drink = require("./drink");
+const Drink = require("./Drink");
 
 class DrinkManager {
   drinkList;
