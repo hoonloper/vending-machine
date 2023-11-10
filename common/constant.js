@@ -9,5 +9,11 @@ const MODEL_KEY = {
   CASH: "CASH",
   PAYMENT: "PAYMENT",
 };
+const COMMAND = {
+  IN_PROGRESS: "진행",
+  RETRY: "다시",
+  PAY: "결제",
+  END: "끝",
+};
 
-module.exports = { STATUS, MODEL_KEY };
+module.exports = { STATUS, MODEL_KEY, COMMAND };

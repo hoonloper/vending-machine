@@ -1,3 +1,4 @@
+const { COMMAND } = require("../common/constant");
 const DrinkManager = require("../models/DrinkManager");
 
 class DrinkStage {
@@ -12,15 +13,17 @@ class DrinkStage {
     if (this.drinkManager.getDrinkNameList().includes(command)) {
       const drink = this.drinkManager.getDrinkByName(command);
       this.setSelectedDrink(drink);
-      console.log("구매 희망 - '진행'\n다시 선택 - '다시'");
-    } else if ("진행" === command) {
-      console.log("결제 수단 선택 - 카드, 현금");
+      console.log(
+        `구매 희망 - '${COMMAND.IN_PROGRESS}'\n다시 선택 - '${COMMAND.RETRY}'`
+      );
+    } else if (COMMAND.IN_PROGRESS === command) {
+      console.log("결제 수단 - '카드' 또는 '현금'");
       return this.getSelectedDrink();
-    } else if ("다시" === command) {
+    } else if (COMMAND.RETRY === command) {
       this.setSelectedDrink(null);
       return null;
     } else {
-      console.log("음료 이름을 다시 입력해 주세요!");
+      console.log("해당 음료가 존재하지 않습니다.");
     }
   }
   getSelectedDrink() {
@@ -47,7 +50,7 @@ class DrinkStage {
       )
       .join("\n");
     console.log(message);
-    console.log("음료를 선택해 주세요.");
+    console.log("어떤 음료를 고르시겠어요?\n시원한 콜라는 어떠신가요?");
     console.log("======================================");
   }
 }

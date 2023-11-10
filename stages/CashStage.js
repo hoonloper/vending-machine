@@ -1,13 +1,14 @@
+const { COMMAND } = require("../common/constant");
 const Cash = require("../models/Cash");
 
 class CashStage {
   cash;
   ALLOWED_CASH_LIST = [100, 500, 1000, 5000, 10000];
   do(command) {
-    if (command === "진행") {
+    if (command === COMMAND.IN_PROGRESS) {
       if (this.cash instanceof Cash) {
         console.log("현금이 정상적으로 입력되었습니다.");
-        console.log("결제를 진행하시려면 '결제'를 입력해 주세요.");
+        console.log(`결제를 진행하시려면 '${COMMAND.PAY}'를 입력해 주세요.`);
         return this.cash;
       }
       console.log("입력된 현금이 없습니다.");
@@ -29,7 +30,7 @@ class CashStage {
     }
     this.cash = new Cash(cash);
     console.log(
-      "금액을 더 추가하시려면 새로운 금액을 입력해 주시고, 결제를 진행하시려면 '진행', 환불받고 끝내려면 '끝'을 입력해 주세요."
+      `금액 추가 - 새로운 금액 입력\n결제 진행 - '${COMMAND.IN_PROGRESS}' 입력\n환불 - '${COMMAND.END}' 입력`
     );
   }
 

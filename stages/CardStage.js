@@ -1,9 +1,10 @@
+const { COMMAND } = require("../common/constant");
 const Card = require("../models/Card");
 
 class CardStage {
   card;
   do(command) {
-    if (command === "네") {
+    if (command === COMMAND.IN_PROGRESS) {
       if (this.card instanceof Card) {
         console.log("카드 등록이 정상적으로 완료되었습니다.");
         console.log("결제를 진행하시려면 '결제'를 입력해 주세요.");
@@ -13,7 +14,7 @@ class CardStage {
       this.logMessage();
       return null;
     }
-    if (command === "재입력") {
+    if (command === COMMAND.RETRY) {
       this.card = null;
       this.logMessage();
       return null;
@@ -32,7 +33,7 @@ class CardStage {
     console.log(`- 생년월일: ${birthDay}`);
     console.log("------------------------------------");
     console.log(
-      "카드 결제를 희망하시면 '네', 정보 재입력을 희망하시면 '재입력', 끝내려면 '끝'을 입력해 주세요."
+      `카드 결제 희망 - '${COMMAND.IN_PROGRESS}' 입력\n정보 재입력 희망 - '${COMMAND.RETRY}' 입력\n끝내려면 '${COMMAND.END}' 입력`
     );
   }
 

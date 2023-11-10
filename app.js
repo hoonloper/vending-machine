@@ -1,6 +1,7 @@
 const readlineLib = require("readline");
 const Launcher = require("./Launcher");
 const { log, logs } = require("./common/utils");
+const { STATUS, COMMAND } = require("./common/constant");
 
 const readline = readlineLib.createInterface({
   input: process.stdin,
@@ -20,7 +21,7 @@ class Application {
 
   run() {
     const byeMessage = "이용해 주셔서 감사합니다.";
-    const reuseMessage = "재이용 - '구매' 입력\n퇴장 - '끝' 입력";
+    const reuseMessage = `재이용 - '${COMMAND.IN_PROGRESS}' 입력\n퇴장 - '${COMMAND.END}' 입력`;
     const welcomeMessage = "안녕하세요. 저희 자판기를 찾아주셔서 감사합니다.";
     log(welcomeMessage);
 
@@ -28,11 +29,11 @@ class Application {
     let status = null;
 
     readline.on("line", (input) => {
-      if (input === "끝") {
+      if (input === COMMAND.END) {
         closeWithLog(byeMessage);
       }
-      if (status === "COMPLETE") {
-        if (input !== "이용") {
+      if (status === STATUS.COMPLETE) {
+        if (input !== COMMAND.IN_PROGRESS) {
           closeWithLog(byeMessage);
         }
         status = null;
@@ -44,7 +45,7 @@ class Application {
 
       try {
         const status = launcher.run(input) ?? null;
-        if (status === "COMPLETE") {
+        if (status === STATUS.COMPLETE) {
           logs(byeMessage, reuseMessage);
           return null;
         }

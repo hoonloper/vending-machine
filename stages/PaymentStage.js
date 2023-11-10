@@ -1,4 +1,4 @@
-const { MODEL_KEY, STATUS } = require("../common/constant");
+const { MODEL_KEY, STATUS, COMMAND } = require("../common/constant");
 const Card = require("../models/Card");
 const Cash = require("../models/Cash");
 
@@ -9,10 +9,10 @@ class PaymentStage {
   type = null;
 
   do(command) {
-    if (command !== "진행") {
+    if (command !== COMMAND.IN_PROGRESS) {
       console.log("잘못된 입력입니다.");
       console.log(
-        "결제를 진행하시려면 '진행'을 입력해 주시고, 끝내려면 '끝'을 입력해 주세요."
+        `결제 진행 - '${COMMAND.IN_PROGRESS}' 입력, 끝내기 - '${COMMAND.END}' 입력`
       );
       return null;
     }
@@ -28,9 +28,7 @@ class PaymentStage {
       change = this.card.getPrice();
     } else if (type === MODEL_KEY.CASH) {
       if (!this.cash.checkPriceRange(drinkPrice)) {
-        console.log(
-          "금액이 충분하지 않습니다. 충분한 금액을 입력해 주시기 바랍니다."
-        );
+        console.log("🚨🚨🚨 금액 부족 🚨🚨🚨");
         throw Error("FAIL:NOT_ENOUGH");
       }
       this.cash.decrease(drinkPrice);
