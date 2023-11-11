@@ -21,8 +21,8 @@ class Application {
   };
 
   run() {
-    const byeMessage = "이용해 주셔서 감사합니다.";
-    const reuseMessage = `재이용 - '${COMMAND.IN_PROGRESS}' 입력\n퇴장 - '${COMMAND.END}' 입력`;
+    const byeMessage = "🙇 이용해 주셔서 감사합니다 🙇";
+    const reuseMessage = `재이용 - '${COMMAND.IN_PROGRESS}'\n퇴장 - '${COMMAND.END}'`;
     const welcomeMessage =
       "\n\n👋 안녕하세요. 저희 자판기를 찾아주셔서 감사합니다.\n\n";
     logDivider();
@@ -51,6 +51,7 @@ class Application {
         if (resultStatus === STATUS.COMPLETE) {
           status = resultStatus;
           logs(byeMessage, reuseMessage);
+          logDivider();
         }
       } catch (error) {
         console.log(error);

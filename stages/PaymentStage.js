@@ -13,9 +13,7 @@ class PaymentStage {
     if (command !== COMMAND.IN_PROGRESS) {
       logDivider();
       log("잘못된 입력입니다.");
-      log(
-        `결제 진행 - '${COMMAND.IN_PROGRESS}' 입력, 끝내기 - '${COMMAND.END}' 입력`
-      );
+      log(`결제 진행 - '${COMMAND.IN_PROGRESS}', 끝내기 - '${COMMAND.END}'`);
       logDivider();
       return null;
     }
@@ -107,7 +105,7 @@ class PaymentStage {
     log(paymentMessage);
     logDivider();
     log("⭐️ 결제 내역을 꼭 확인해 주세요.");
-    log("결제 확정 - '진행' 입력\n결제 종료 - '끝' 입력");
+    log("결제 확정 - '진행'\n결제 종료 - '끝'");
     logDivider();
   }
 }

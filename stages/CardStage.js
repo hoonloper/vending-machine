@@ -78,7 +78,7 @@ class CardStage {
     log(`- 만료일: ${this.getCard().getExpiredDate()}`);
     log(`- 생년월일: ${this.getCard().getBirthDay()}`);
     log(
-      `\n카드 결제 희망 - '${COMMAND.IN_PROGRESS}' 입력\n정보 재입력 희망 - '${COMMAND.RETRY}' 입력\n종료 - '${COMMAND.END}' 입력`
+      `\n카드 결제 희망 - '${COMMAND.IN_PROGRESS}'\n정보 재입력 희망 - '${COMMAND.RETRY}'\n종료 - '${COMMAND.END}'`
     );
   }
 

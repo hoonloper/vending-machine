@@ -86,7 +86,7 @@ class CashStage {
   }
   logPayment() {
     log(
-      `금액 추가 - 새로운 금액 입력\n결제 진행 - '${COMMAND.IN_PROGRESS}' 입력\n환불 - '${COMMAND.END}' 입력`
+      `금액 추가 - 새로운 금액\n결제 진행 - '${COMMAND.IN_PROGRESS}'\n환불 - '${COMMAND.END}'`
     );
   }
 
