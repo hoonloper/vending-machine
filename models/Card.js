@@ -56,6 +56,14 @@ class Card {
   getPrice() {
     return this.usedPrice;
   }
+  getInfo() {
+    return {
+      number: this.formatNumber(this.blurNumber(this.getNumber())),
+      expiredDate: this.getExpiredDate(),
+      birthDay: this.getBirthDay(),
+      price: this.getPrice(),
+    };
+  }
 
   increase(price) {
     if (price < 0) {

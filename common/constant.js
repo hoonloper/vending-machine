@@ -14,6 +14,7 @@ const COMMAND = {
   RETRY: "다시",
   PAY: "결제",
   END: "끝",
+  HISTORY: "내역",
 };
 
 module.exports = { STATUS, MODEL_KEY, COMMAND };

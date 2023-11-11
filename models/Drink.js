@@ -46,6 +46,10 @@ class Drink {
   copy() {
     return new Drink(this.getName(), this.getPrice(), this.getCount());
   }
+
+  static isDrink(drink) {
+    return drink instanceof Drink;
+  }
 }
 
 module.exports = Drink;
