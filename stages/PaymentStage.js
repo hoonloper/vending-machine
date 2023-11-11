@@ -28,7 +28,7 @@ class PaymentStage {
     let change = 0;
     if (type === MODEL_KEY.CARD) {
       this.card.increase(drinkPrice);
-      change = this.card.getPrice();
+      change = -1;
     } else if (type === MODEL_KEY.CASH) {
       if (!this.cash.checkPriceRange(drinkPrice)) {
         logDivider();
@@ -42,10 +42,9 @@ class PaymentStage {
     this.drink.decreaseCount();
     logDivider();
     log("결제가 완료되었습니다.");
-    logDivider();
-    log("결제 내역");
+    log("\n결제 내역");
     log(`- 금액: ${drinkPrice}원`);
-    log(`- 잔액: ${change}원`);
+    log(change >= 0 ? `- 잔액: ${change}원` : "");
     logDivider();
     return STATUS.COMPLETE;
   }

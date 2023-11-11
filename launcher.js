@@ -9,7 +9,7 @@ class Launcher {
   }
 
   run(command) {
-    return this.stageManager.run(command);
+    return this.stageManager.run(command.trim());
   }
 
   recordStageManager() {
