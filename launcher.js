@@ -9,15 +9,24 @@ class Launcher {
   }
 
   run(command) {
-    return this.stageManager.run(command.trim());
+    return this.getStageManager().run(command.trim());
   }
 
-  recordStageManager() {
-    this.stageManagerHistory.push(this.stageManager);
+  getStageManager() {
+    return this.stageManager;
+  }
+  getStageManagerHistory() {
+    return this.stageManagerHistory;
   }
 
-  static newLauncher() {
-    this.recordStageManager();
+  recordStageManager(stageManager) {
+    this.getStageManagerHistory().push(stageManager);
+  }
+
+  newLauncher() {
+    const beforeStageManager = this.getStageManager().copy();
+    this.recordStageManager(beforeStageManager);
+    this.getStageManager().initStage();
     return this;
   }
 }

@@ -1,5 +1,5 @@
 const { InvalidError } = require("../common/CustomError");
-const { validNumberString } = require("../common/utils");
+const { validNumberString, validStrictNumber } = require("../common/utils");
 
 class Card {
   static NUMBER_LENGTH = 16;
@@ -13,12 +13,13 @@ class Card {
   birthDay;
   usedPrice = 0;
 
-  constructor(number, expiredDate, birthDay) {
+  constructor(number, expiredDate, birthDay, usedPrice = 0) {
     if (!this.validCardNumber(number)) {
       throw InvalidError("카드 번호");
     }
     this.number = number;
 
+    console.log(expiredDate);
     if (!this.validExpiredDate(expiredDate)) {
       throw InvalidError("만료일자");
     }
@@ -28,6 +29,7 @@ class Card {
       throw InvalidError("생년월일");
     }
     this.birthDay = birthDay;
+    this.usedPrice = usedPrice;
   }
 
   /**
@@ -45,6 +47,12 @@ class Card {
   getNumber() {
     return this.number;
   }
+  getExpiredDate() {
+    return this.expiredDate;
+  }
+  getBirthDay() {
+    return this.birthDay;
+  }
   getPrice() {
     return this.usedPrice;
   }
@@ -54,6 +62,15 @@ class Card {
       throw InvalidError("가격");
     }
     this.usedPrice += price;
+  }
+
+  copy() {
+    return new Card(
+      this.getNumber(),
+      this.getExpiredDate(),
+      this.getBirthDay(),
+      this.getPrice()
+    );
   }
 
   validCardNumber(number) {
@@ -97,6 +114,14 @@ class Card {
       return false;
     }
     return true;
+  }
+
+  hasPrice() {
+    return validStrictNumber(this.getPrice()) && this.getPrice() > 0;
+  }
+
+  static isCard(card) {
+    return card instanceof Card;
   }
 }
 

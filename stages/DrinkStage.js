@@ -62,6 +62,13 @@ class DrinkStage {
     log(message);
     logDivider();
   }
+
+  copy() {
+    const newDrinkManager = new DrinkManager();
+    newDrinkManager.setSelectedDrink(this.getSelectedDrink());
+    console.log("new drink manager ->>>>", newDrinkManager);
+    return newDrinkManager;
+  }
 }
 
 module.exports = DrinkStage;

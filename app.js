@@ -23,7 +23,8 @@ class Application {
   run() {
     const byeMessage = "이용해 주셔서 감사합니다.";
     const reuseMessage = `재이용 - '${COMMAND.IN_PROGRESS}' 입력\n퇴장 - '${COMMAND.END}' 입력`;
-    const welcomeMessage = "안녕하세요. 저희 자판기를 찾아주셔서 감사합니다.";
+    const welcomeMessage =
+      "\n\n👋 안녕하세요. 저희 자판기를 찾아주셔서 감사합니다.\n\n";
     logDivider();
     log(welcomeMessage);
 
@@ -39,18 +40,20 @@ class Application {
           closeWithLog(byeMessage);
         }
         status = null;
-        launcher = Launcher.newLauncher();
         log(welcomeMessage);
+        launcher = launcher.newLauncher();
         return;
       }
 
       try {
-        const status = launcher.run(input) ?? null;
-        if (status === STATUS.COMPLETE) {
+        const resultStatus = launcher.run(input) ?? null;
+
+        if (resultStatus === STATUS.COMPLETE) {
+          status = resultStatus;
           logs(byeMessage, reuseMessage);
-          return null;
         }
       } catch (error) {
+        console.log(error);
         log(error);
         const [type, message] = error.message.split(":");
 

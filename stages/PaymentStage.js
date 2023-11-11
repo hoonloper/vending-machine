@@ -25,10 +25,10 @@ class PaymentStage {
 
   payWith(type) {
     const drinkPrice = this.drink.getPrice();
-    let change = 0;
+    let changeText = 0;
     if (type === MODEL_KEY.CARD) {
       this.card.increase(drinkPrice);
-      change = -1;
+      changeText = `- 현재까지 사용 금액: ${this.card.getPrice()}`;
     } else if (type === MODEL_KEY.CASH) {
       if (!this.cash.checkPriceRange(drinkPrice)) {
         logDivider();
@@ -37,14 +37,14 @@ class PaymentStage {
         throw Error("FAIL:NOT_ENOUGH");
       }
       this.cash.decrease(drinkPrice);
-      change = this.cash.getPrice();
+      changeText = `- 잔액: ${this.cash.getPrice()}원`;
     }
     this.drink.decreaseCount();
     logDivider();
     log("결제가 완료되었습니다.");
     log("\n결제 내역");
     log(`- 금액: ${drinkPrice}원`);
-    log(change >= 0 ? `- 잔액: ${change}원` : "");
+    log(changeText);
     logDivider();
     return STATUS.COMPLETE;
   }

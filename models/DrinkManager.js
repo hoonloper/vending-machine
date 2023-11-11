@@ -3,11 +3,13 @@ const Drink = require("./Drink");
 class DrinkManager {
   drinkList;
 
-  constructor() {
-    this.drinkList = [];
-    this.addDrink("콜라", 1100, 15);
-    this.addDrink("물", 600, 15);
-    this.addDrink("커피", 700, 15);
+  constructor(drinkList = []) {
+    this.drinkList = drinkList;
+    if (drinkList.length === 0) {
+      this.addDrink("콜라", 1100, 15);
+      this.addDrink("물", 600, 15);
+      this.addDrink("커피", 700, 15);
+    }
   }
 
   getDrinkNameList() {
@@ -24,6 +26,10 @@ class DrinkManager {
   }
   clearDrinkList() {
     this.drinkList = [];
+  }
+
+  copy() {
+    return new DrinkManager(this.getDrinkList().map((drink) => drink.copy()));
   }
 }
 

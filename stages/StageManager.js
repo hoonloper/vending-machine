@@ -11,24 +11,26 @@ class StageManager {
     결제: { key: MODEL_KEY.PAYMENT },
   };
 
-  stages = null;
+  stages = {
+    DRINK: new DrinkStage(),
+    CARD: new CardStage(),
+    CASH: new CashStage(),
+    PAYMENT: new PaymentStage(),
+  };
   stage = null;
   status = STATUS.IN_PROGRESS;
-  selectedList = [];
+  selectedStages = [];
 
-  constructor(type = MODEL_KEY.DRINK) {
-    const stages = {
-      DRINK: new DrinkStage(),
-      CARD: new CardStage(),
-      CASH: new CashStage(),
-      PAYMENT: new PaymentStage(),
-    };
-    this.stages = stages;
-    this.stage = stages[type] ?? null;
-    if (this.stage === null) {
+  constructor(type = MODEL_KEY.DRINK, selectedStages = []) {
+    this.setStage(this.getStages()[type] ?? null);
+    if (this.getStage() === null) {
       throw Error("INVALID:TYPE");
     }
-    this.stage.run();
+    if (selectedStages.length === 0) {
+      this.getStage().run();
+    } else {
+      this.setSelectedStages(selectedStages);
+    }
   }
 
   run(command) {
@@ -41,34 +43,51 @@ class StageManager {
       const key = StageManager.STAGE_MAPPER[command].key;
       this.nextStage(key);
     }
-    return status === STATUS.COMPLETE ? status : null;
+    const updatedStatus = this.getStatus();
+    return updatedStatus === STATUS.COMPLETE ? updatedStatus : null;
   }
 
   nextStage(key) {
-    this.stage = this.stages[key];
+    this.setStage(this.getStages()[key]);
 
     if (key === MODEL_KEY.PAYMENT) {
-      this.stage.init(this.selectedList);
+      this.getStage().init(this.selectedStages);
     }
 
-    this.stage.run();
+    this.getStage().run();
     this.setStatus(STATUS.IN_PROGRESS);
   }
 
   progressStage(command) {
-    const response = this.stage.do(command);
+    const response = this.getStage().do(command);
     if (response === STATUS.COMPLETE) {
       this.setStatus(STATUS.COMPLETE);
       return null;
     }
     if (![null, undefined].includes(response)) {
-      this.selectedList.push(response);
+      this.addSelectedStage(response);
       this.setStatus(STATUS.DONE);
     }
   }
 
+  copy() {
+    const beforeSelectedStages = this.getSelectedStages().map((stage) =>
+      stage.copy()
+    );
+    const newStageManager = new StageManager(
+      MODEL_KEY.DRINK,
+      beforeSelectedStages
+    );
+    newStageManager.setStatus(STATUS.COMPLETE);
+    newStageManager.setStage(this.getStage());
+    return newStageManager;
+  }
+
   initStage() {
-    this.stage = this.stages[MODEL_KEY.DRINK];
+    this.setStage(this.getStages()[MODEL_KEY.DRINK]);
+    this.getStage().logMessage();
+    this.setStatus(STATUS.IN_PROGRESS);
+    this.setSelectedStages([]);
   }
 
   getStatus() {
@@ -76,6 +95,27 @@ class StageManager {
   }
   setStatus(status) {
     this.status = status;
+  }
+  getStage() {
+    return this.stage;
+  }
+  setStage(stage) {
+    this.stage = stage;
+  }
+  getStages() {
+    return this.stages;
+  }
+  setStages(stages) {
+    this.stages = stages;
+  }
+  getSelectedStages() {
+    return this.selectedStages;
+  }
+  setSelectedStages(selectedStages) {
+    this.selectedStages = selectedStages;
+  }
+  addSelectedStage(stage) {
+    this.getSelectedStages().push(stage);
   }
 
   validStageKey(key) {
