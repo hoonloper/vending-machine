@@ -39,7 +39,9 @@ class StageManager {
     if (status === STATUS.IN_PROGRESS) {
       this.progressStage(command);
     } else if (status === STATUS.DONE) {
-      this.validStageKey(command);
+      if (!this.validStageKey(command)) {
+        throw new NotFoundError(key);
+      }
 
       const key = StageManager.STAGE_MAPPER[command].key;
       this.nextStage(key);
@@ -120,9 +122,7 @@ class StageManager {
   }
 
   validStageKey(key) {
-    if (StageManager.STAGE_MAPPER in key) {
-      throw new NotFoundError(key);
-    }
+    return this.STAGE_MAPPER.hasOwnProperty(key);
   }
 }
 
