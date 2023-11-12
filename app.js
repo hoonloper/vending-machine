@@ -30,48 +30,32 @@ class Application {
     return this.launcher;
   }
 
-  #closeWithLog(message) {
-    logDivider();
-    log(message);
-    readline.close();
-  }
-
   run() {
     const launcher = this.#getLauncher();
-    const closeWithLog = this.#closeWithLog;
-    let status = null;
+    let status = null; // 완료 여부 상태
 
-    readline.prompt();
-    readline.on("line", (command) => {
-      // 끝 입력하면 언제든 종료
-      if (command === COMMAND.END) {
-        launcher.logUsageHistory();
-        closeWithLog(LauncherLogger.getByeMessage());
-      }
+    // 앱 실행
+    const execute = (command) =>
+      command === COMMAND.END // 끝 입력하면 언제든 종료
+        ? closeWithLog(LauncherLogger.getByeMessage())
+        : status === STATUS.COMPLETE // 완료됐을 때 핸들링
+        ? handleCompleted(command)
+        : executeLauncher(command); // 자판기 가동
 
-      // 완료됐을 때 핸들링
-      if (status === STATUS.COMPLETE) {
-        if (command === COMMAND.IN_PROGRESS) {
-          status = null;
-          LauncherLogger.logWelcomeMessage();
-          launcher.newLauncher();
-          return null;
-        }
-        if (command === COMMAND.HISTORY) {
-          launcher.logUsageHistory();
-          LauncherLogger.logReuseMessage();
-          logDivider();
-          return null;
-        }
+    // 구매 완료 후 핸들링
+    const handleCompleted = (command) =>
+      command === COMMAND.RETRY
+        ? retry()
+        : command === COMMAND.HISTORY
+        ? history()
+        : closeWithLog(LauncherLogger.getByeMessage());
 
-        closeWithLog(LauncherLogger.getByeMessage());
-      }
-
+    // 자판기 가동
+    const executeLauncher = (command) => {
       try {
-        const resultStatus = launcher.run(command) ?? null;
+        status = launcher.run(command) ?? null;
 
-        if (resultStatus === STATUS.COMPLETE) {
-          status = resultStatus;
+        if (status === STATUS.COMPLETE) {
           logs(
             LauncherLogger.getByeMessage(),
             "\n",
@@ -82,22 +66,53 @@ class Application {
       } catch (error) {
         logDivider(true);
 
-        const isCustomError =
-          ServerError.isError(error) ||
-          InvalidError.isError(error) ||
-          NotFoundError.isError(error);
-        if (isCustomError) {
+        if (checkCustomError(error)) {
           error.logMessage();
         } else {
-          log("🚨 알 수 없는 에러입니다. 🚨");
-          log(error);
+          logs("🚨 알 수 없는 에러입니다. 🚨", error);
         }
 
         logDivider(true);
       } finally {
         readline.prompt();
+        return null;
       }
-    });
+    };
+
+    // 커스텀 에러 확인
+    const checkCustomError = (error) =>
+      ServerError.isError(error) ||
+      InvalidError.isError(error) ||
+      NotFoundError.isError(error);
+
+    // 종료
+    const closeWithLog = (message) => {
+      launcher.logUsageHistory();
+      logDivider();
+      log(message);
+      readline.close();
+      return null;
+    };
+
+    // 다시 이용
+    const retry = () => {
+      status = null;
+      LauncherLogger.logWelcomeMessage();
+      launcher.newLauncher();
+      return null;
+    };
+
+    // 사용 내역 조회
+    const history = () => {
+      launcher.logUsageHistory();
+      LauncherLogger.logReuseMessage();
+      logDivider();
+      return null;
+    };
+
+    // 키 입력 받는 부분
+    readline.prompt();
+    readline.on("line", execute);
   }
 }
 
