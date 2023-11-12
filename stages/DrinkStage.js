@@ -11,7 +11,7 @@ class DrinkStage {
   }
 
   do(command) {
-    if (this.drinkManager.getDrinkNameList().includes(command)) {
+    if (this.getDrinkManager().getDrinkByName(command) !== null) {
       const drink = this.getDrinkManager().getDrinkByName(command);
       this.setSelectedDrink(drink);
       logDivider();
@@ -19,6 +19,7 @@ class DrinkStage {
         `구매 희망 - '${COMMAND.IN_PROGRESS}'\n다시 선택 - '${COMMAND.RETRY}'`
       );
       logDivider();
+      return null;
     }
     if (COMMAND.IN_PROGRESS === command) {
       logDivider();
