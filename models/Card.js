@@ -11,7 +11,7 @@ class Card {
   number;
   expiredDate;
   birthDay;
-  usedPrice = 0;
+  usedPrice;
 
   constructor(number, expiredDate, birthDay, usedPrice = 0) {
     if (!this.validCardNumber(number)) {
@@ -82,10 +82,7 @@ class Card {
   }
 
   validCardNumber(number) {
-    if (number.length !== 16 || !validNumberString(number)) {
-      return false;
-    }
-    return true;
+    return number.length === 16 && validNumberString(number);
   }
 
   validExpiredDate(expired) {

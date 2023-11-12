@@ -12,7 +12,7 @@ class DrinkStage {
 
   do(command) {
     if (this.drinkManager.getDrinkNameList().includes(command)) {
-      const drink = this.drinkManager.getDrinkByName(command);
+      const drink = this.getDrinkManager().getDrinkByName(command);
       this.setSelectedDrink(drink);
       logDivider();
       log(
@@ -33,6 +33,9 @@ class DrinkStage {
       logDivider();
     }
   }
+  getDrinkManager() {
+    return this.drinkManager;
+  }
   getSelectedDrink() {
     return this.selectedDrink;
   }
@@ -45,13 +48,13 @@ class DrinkStage {
   }
 
   logMessage() {
-    if (this.drinkManager.getDrinkList().length <= 0) {
+    if (this.getDrinkManager().getDrinkList().length <= 0) {
       logDivider();
       log("현재 자판기에 비치된 음료가 없습니다.");
       logDivider();
       return;
     }
-    const message = this.drinkManager
+    const message = this.getDrinkManager()
       .getDrinkList()
       .map(
         (drink) =>
@@ -66,7 +69,6 @@ class DrinkStage {
   copy() {
     const newDrinkManager = new DrinkManager();
     newDrinkManager.setSelectedDrink(this.getSelectedDrink());
-    console.log("new drink manager ->>>>", newDrinkManager);
     return newDrinkManager;
   }
 }

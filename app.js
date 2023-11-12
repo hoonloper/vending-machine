@@ -19,6 +19,15 @@ class Application {
       DRINK: "찾는 음료가 없습니다.",
     },
   };
+  launcher;
+
+  constructor() {
+    this.launcher = new Launcher();
+  }
+
+  getLauncher() {
+    return this.launcher;
+  }
 
   run() {
     const byeMessage = "🙇 이용해 주셔서 감사합니다 🙇";
@@ -28,30 +37,36 @@ class Application {
     logDivider();
     log(welcomeMessage);
 
-    let launcher = new Launcher();
+    const launcher = this.getLauncher();
     let status = null;
+
     readline.prompt();
-    readline.on("line", (input) => {
-      if (input === COMMAND.END) {
+    readline.on("line", (command) => {
+      // 끝 입력하면 언제든 종료
+      if (command === COMMAND.END) {
         closeWithLog(byeMessage);
       }
+
+      // 완료됐을 때 핸들링
       if (status === STATUS.COMPLETE) {
-        if (input === COMMAND.IN_PROGRESS) {
+        if (command === COMMAND.IN_PROGRESS) {
           status = null;
           log(welcomeMessage);
           launcher.newLauncher();
-        } else if (input === COMMAND.HISTORY) {
+          return null;
+        }
+        if (command === COMMAND.HISTORY) {
           launcher.logUsageHistory();
           log(reuseMessage);
           logDivider();
-        } else {
-          closeWithLog(byeMessage);
+          return null;
         }
-        return null;
+
+        closeWithLog(byeMessage);
       }
 
       try {
-        const resultStatus = launcher.run(input) ?? null;
+        const resultStatus = launcher.run(command) ?? null;
 
         if (resultStatus === STATUS.COMPLETE) {
           status = resultStatus;
@@ -60,8 +75,8 @@ class Application {
         }
       } catch (error) {
         log(error);
-        const [type, message] = error.message.split(":");
 
+        const [type, message] = error.message.split(":");
         log(this.ERROR_MAPPER?.[type]?.[message] ?? "다시 시도해 주세요.");
       } finally {
         readline.prompt();

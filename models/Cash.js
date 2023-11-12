@@ -18,13 +18,13 @@ class Cash {
     this.price += price;
   }
   decrease(price) {
-    if (this.price - price < 0) {
-      throw Error("INVALID:PRICE");
+    if (!this.checkPriceRange(price)) {
+      throw Error("가격");
     }
     this.price -= price;
   }
   checkPriceRange(price) {
-    return typeof price === "number" && price >= 0 && this.price - price >= 0;
+    return validStrictNumber(price) && price >= 0 && this.price - price >= 0;
   }
   hasPrice() {
     return validStrictNumber(this.getPrice()) && this.getPrice() > 0;

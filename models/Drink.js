@@ -2,9 +2,9 @@ const { InvalidError } = require("../common/CustomError");
 const { validStrictNumber, validFilledString } = require("../common/utils");
 
 class Drink {
-  name = "";
-  price = 0;
-  count = 0;
+  name;
+  price;
+  count;
 
   constructor(name, price = 0, count = 0) {
     if (!validFilledString(name)) {
@@ -30,9 +30,7 @@ class Drink {
   getCount() {
     return this.count;
   }
-  setName(newName) {
-    this.name = newName;
-  }
+
   decreaseCount() {
     this.count--;
   }

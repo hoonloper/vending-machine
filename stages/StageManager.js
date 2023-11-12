@@ -51,7 +51,7 @@ class StageManager {
     this.setStage(this.getStages()[key]);
 
     if (key === MODEL_KEY.PAYMENT) {
-      this.getStage().init(this.selectedStages);
+      this.getStage().init(this.getSelectedStages());
     }
 
     this.getStage().run();
