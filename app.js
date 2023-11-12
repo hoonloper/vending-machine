@@ -2,6 +2,12 @@ const readlineLib = require("readline");
 const Launcher = require("./Launcher");
 const { log, logs, logDivider } = require("./common/utils");
 const { STATUS, COMMAND } = require("./common/constant");
+const {
+  ServerError,
+  InvalidError,
+  NotFoundError,
+} = require("./common/CustomError");
+const LauncherLogger = require("./LauncherLogger");
 
 const readline = readlineLib.createInterface({
   input: process.stdin,
@@ -13,15 +19,10 @@ readline.on("close", () => {
 });
 
 class Application {
-  ERROR_MAPPER = {
-    NOT_FOUND: {
-      COMMAND: "잘못된 명령어입니다.",
-      DRINK: "찾는 음료가 없습니다.",
-    },
-  };
   launcher;
 
   constructor() {
+    LauncherLogger.logWelcomeMessage();
     this.launcher = new Launcher();
   }
 
@@ -30,13 +31,6 @@ class Application {
   }
 
   run() {
-    const byeMessage = "🙇 이용해 주셔서 감사합니다 🙇";
-    const reuseMessage = `- 재이용: '${COMMAND.IN_PROGRESS}'\n- 사용 내역: '${COMMAND.HISTORY}'\n- 퇴장: 아무키나 입력`;
-    const welcomeMessage =
-      "\n\n👋 안녕하세요. 저희 자판기를 찾아주셔서 감사합니다.\n\n";
-    logDivider();
-    log(welcomeMessage);
-
     const launcher = this.getLauncher();
     let status = null;
 
@@ -44,25 +38,25 @@ class Application {
     readline.on("line", (command) => {
       // 끝 입력하면 언제든 종료
       if (command === COMMAND.END) {
-        closeWithLog(byeMessage);
+        closeWithLog(LauncherLogger.getByeMessage());
       }
 
       // 완료됐을 때 핸들링
       if (status === STATUS.COMPLETE) {
         if (command === COMMAND.IN_PROGRESS) {
           status = null;
-          log(welcomeMessage);
+          LauncherLogger.logWelcomeMessage();
           launcher.newLauncher();
           return null;
         }
         if (command === COMMAND.HISTORY) {
           launcher.logUsageHistory();
-          log(reuseMessage);
+          LauncherLogger.logReuseMessage();
           logDivider();
           return null;
         }
 
-        closeWithLog(byeMessage);
+        closeWithLog(LauncherLogger.getByeMessage());
       }
 
       try {
@@ -70,14 +64,26 @@ class Application {
 
         if (resultStatus === STATUS.COMPLETE) {
           status = resultStatus;
-          logs(byeMessage, "\n", reuseMessage);
+          logs(
+            LauncherLogger.getByeMessage(),
+            "\n",
+            LauncherLogger.getReuseMessage()
+          );
           logDivider();
         }
       } catch (error) {
+        if (
+          ServerError.isError(error) ||
+          InvalidError.isError(error) ||
+          NotFoundError.isError(error)
+        ) {
+          error.logMessage();
+          return;
+        }
+        logDivider(true);
+        log("🚨 알 수 없는 에러입니다. 🚨");
         log(error);
-
-        const [type, message] = error.message.split(":");
-        log(this.ERROR_MAPPER?.[type]?.[message] ?? "다시 시도해 주세요.");
+        logDivider(true);
       } finally {
         readline.prompt();
       }
