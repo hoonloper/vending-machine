@@ -5,15 +5,15 @@ const Drink = require("../models/Drink");
 const DrinkManager = require("../models/DrinkManager");
 
 class DrinkStage {
-  drinkManager;
-  selectedDrink = null;
+  #drinkManager;
+  #selectedDrink = null;
 
   constructor() {
-    this.drinkManager = new DrinkManager();
+    this.#drinkManager = new DrinkManager();
   }
 
   do(command) {
-    const drink = this.getDrinkManager().getDrinkByName(command);
+    const drink = this.#getDrinkManager().getDrinkByName(command);
     if (Drink.isDrink(drink)) {
       this.setSelectedDrink(drink);
       logDivider();
@@ -23,14 +23,14 @@ class DrinkStage {
       logDivider();
       return null;
     }
-    if (!Drink.isDrink(this.getSelectedDrink())) {
+    if (!Drink.isDrink(this.#getSelectedDrink())) {
       throw new InvalidError(command);
     }
     if (COMMAND.IN_PROGRESS === command) {
       logDivider();
       log("결제 수단\n- '카드'\n- '현금'");
       logDivider();
-      return this.getSelectedDrink();
+      return this.#getSelectedDrink();
     }
     if (COMMAND.RETRY === command) {
       this.setSelectedDrink(null);
@@ -40,14 +40,14 @@ class DrinkStage {
 
     throw new InvalidError(command);
   }
-  getDrinkManager() {
-    return this.drinkManager;
+  #getDrinkManager() {
+    return this.#drinkManager;
   }
-  getSelectedDrink() {
-    return this.selectedDrink;
+  #getSelectedDrink() {
+    return this.#selectedDrink;
   }
   setSelectedDrink(drink) {
-    this.selectedDrink = drink;
+    this.#selectedDrink = drink;
   }
 
   run() {
@@ -55,13 +55,13 @@ class DrinkStage {
   }
 
   logMessage() {
-    if (this.getDrinkManager().getDrinkList().length <= 0) {
+    if (this.#getDrinkManager().getDrinkList().length <= 0) {
       logDivider();
       log("현재 자판기에 비치된 음료가 없습니다.");
       logDivider();
       return null;
     }
-    const message = this.getDrinkManager()
+    const message = this.#getDrinkManager()
       .getDrinkList()
       .map(
         (drink) =>
@@ -75,7 +75,7 @@ class DrinkStage {
 
   copy() {
     const newDrinkManager = new DrinkManager();
-    newDrinkManager.setSelectedDrink(this.getSelectedDrink());
+    newDrinkManager.setSelectedDrink(this.#getSelectedDrink());
     return newDrinkManager;
   }
 }

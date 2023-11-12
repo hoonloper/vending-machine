@@ -26,12 +26,19 @@ class Application {
     this.launcher = new Launcher();
   }
 
-  getLauncher() {
+  #getLauncher() {
     return this.launcher;
   }
 
+  #closeWithLog(message) {
+    logDivider();
+    log(message);
+    readline.close();
+  }
+
   run() {
-    const launcher = this.getLauncher();
+    const launcher = this.#getLauncher();
+    const closeWithLog = this.#closeWithLog;
     let status = null;
 
     readline.prompt();
@@ -91,12 +98,6 @@ class Application {
       }
     });
   }
-}
-
-function closeWithLog(message) {
-  logDivider();
-  log(message);
-  readline.close();
 }
 
 const app = new Application();

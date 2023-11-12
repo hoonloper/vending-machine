@@ -6,71 +6,39 @@ const { STATUS, MODEL_KEY } = require("../common/constant");
 const { InvalidError, NotFoundError } = require("../common/CustomError");
 
 class StageManager {
-  static STAGE_MAPPER = {
+  static #STAGE_MAPPER = {
     카드: { key: MODEL_KEY.CARD },
     현금: { key: MODEL_KEY.CASH },
     결제: { key: MODEL_KEY.PAYMENT },
   };
 
-  stages = {
+  #stages = {
     DRINK: new DrinkStage(),
     CARD: new CardStage(),
     CASH: new CashStage(),
     PAYMENT: new PaymentStage(),
   };
-  stage = null;
-  status = STATUS.IN_PROGRESS;
-  selectedStages = [];
+  #stage = null;
+  #status = STATUS.IN_PROGRESS;
+  #selectedStages = [];
 
   constructor(type = MODEL_KEY.DRINK, selectedStages = []) {
-    this.setStage(this.getStages()[type] ?? null);
-    if (this.getStage() === null) {
+    this.#setStage(this.#getStages()[type] ?? null);
+    if (this.#getStage() === null) {
       throw new InvalidError(type);
     }
     if (selectedStages.length === 0) {
-      this.getStage().run();
+      this.#getStage().run();
     } else {
-      this.setSelectedStages(selectedStages);
+      this.#setSelectedStages(selectedStages);
     }
   }
 
-  run(command) {
-    const status = this.getStatus();
-    if (status === STATUS.IN_PROGRESS) {
-      this.progressStage(command);
-    } else if (status === STATUS.DONE) {
-      if (!this.validStageKey(command)) {
-        throw new NotFoundError(key);
-      }
-
-      const key = StageManager.STAGE_MAPPER[command].key;
-      this.nextStage(key);
-    }
-    const updatedStatus = this.getStatus();
-    return updatedStatus === STATUS.COMPLETE ? updatedStatus : null;
-  }
-
-  nextStage(key) {
-    this.setStage(this.getStages()[key]);
-
-    if (key === MODEL_KEY.PAYMENT) {
-      this.getStage().init(this.getSelectedStages());
-    }
-
-    this.getStage().run();
-    this.setStatus(STATUS.IN_PROGRESS);
-  }
-
-  progressStage(command) {
-    const response = this.getStage().do(command);
-    if (response === STATUS.COMPLETE) {
-      this.setStatus(STATUS.COMPLETE);
-      return null;
-    }
-    if (![null, undefined].includes(response)) {
-      this.addSelectedStage(response);
-      this.setStatus(STATUS.DONE);
-    }
+  initStage() {
+    this.#setStage(this.#getStages()[MODEL_KEY.DRINK]);
+    this.#getStage().logMessage();
+    this.#setStatus(STATUS.IN_PROGRESS);
+    this.#setSelectedStages([]);
   }
 
   copy() {
@@ -81,48 +49,77 @@ class StageManager {
       MODEL_KEY.DRINK,
       beforeSelectedStages
     );
-    newStageManager.setStatus(STATUS.COMPLETE);
-    newStageManager.setStage(this.getStage());
+    newStageManager.#setStatus(STATUS.COMPLETE);
+    newStageManager.#setStage(this.#getStage());
     return newStageManager;
   }
 
-  initStage() {
-    this.setStage(this.getStages()[MODEL_KEY.DRINK]);
-    this.getStage().logMessage();
-    this.setStatus(STATUS.IN_PROGRESS);
-    this.setSelectedStages([]);
+  run(command) {
+    const status = this.#getStatus();
+    if (status === STATUS.IN_PROGRESS) {
+      this.#progressStage(command);
+    } else if (status === STATUS.DONE) {
+      if (!this.#validStageKey(command)) {
+        throw new NotFoundError(key);
+      }
+
+      const key = StageManager.#STAGE_MAPPER[command].key;
+      this.#nextStage(key);
+    }
+    const updatedStatus = this.#getStatus();
+    return updatedStatus === STATUS.COMPLETE ? updatedStatus : null;
   }
 
-  getStatus() {
-    return this.status;
+  #nextStage(key) {
+    this.#setStage(this.#getStages()[key]);
+
+    if (key === MODEL_KEY.PAYMENT) {
+      this.#getStage().init(this.getSelectedStages());
+    }
+
+    this.#getStage().run();
+    this.#setStatus(STATUS.IN_PROGRESS);
   }
-  setStatus(status) {
-    this.status = status;
+
+  #progressStage(command) {
+    const response = this.#getStage().do(command);
+    if (response === STATUS.COMPLETE) {
+      this.#setStatus(STATUS.COMPLETE);
+      return null;
+    }
+    if (![null, undefined].includes(response)) {
+      this.#addSelectedStage(response);
+      this.#setStatus(STATUS.DONE);
+    }
   }
-  getStage() {
-    return this.stage;
+
+  #getStatus() {
+    return this.#status;
   }
-  setStage(stage) {
-    this.stage = stage;
+  #setStatus(status) {
+    this.#status = status;
   }
-  getStages() {
-    return this.stages;
+  #getStage() {
+    return this.#stage;
   }
-  setStages(stages) {
-    this.stages = stages;
+  #setStage(stage) {
+    this.#stage = stage;
+  }
+  #getStages() {
+    return this.#stages;
   }
   getSelectedStages() {
-    return this.selectedStages;
+    return this.#selectedStages;
   }
-  setSelectedStages(selectedStages) {
-    this.selectedStages = selectedStages;
+  #setSelectedStages(selectedStages) {
+    this.#selectedStages = selectedStages;
   }
-  addSelectedStage(stage) {
+  #addSelectedStage(stage) {
     this.getSelectedStages().push(stage);
   }
 
-  validStageKey(key) {
-    return StageManager.STAGE_MAPPER.hasOwnProperty(key);
+  #validStageKey(key) {
+    return StageManager.#STAGE_MAPPER.hasOwnProperty(key);
   }
 }
 

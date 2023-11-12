@@ -8,10 +8,10 @@ class Card {
   static TOTAL_CARD_INFO_LENGTH =
     this.NUMBER_LENGTH + this.EXPIRED_LENGTH + this.BIRTH_DAY_LENGTH + 2; // 2는 ':' 개수
 
-  number;
-  expiredDate;
-  birthDay;
-  usedPrice;
+  #number;
+  #expiredDate;
+  #birthDay;
+  #usedPrice;
 
   constructor(number, expiredDate, birthDay, usedPrice = 0) {
     if (!this.validCardNumber(number)) {
@@ -24,10 +24,10 @@ class Card {
       throw new InvalidError(birthDay);
     }
 
-    this.number = number;
-    this.expiredDate = expiredDate;
-    this.birthDay = birthDay;
-    this.usedPrice = usedPrice;
+    this.#number = number;
+    this.#expiredDate = expiredDate;
+    this.#birthDay = birthDay;
+    this.#usedPrice = usedPrice;
   }
 
   /**
@@ -43,16 +43,16 @@ class Card {
     return number.slice(0, 8) + "****" + number.slice(12);
   }
   getNumber() {
-    return this.number;
+    return this.#number;
   }
   getExpiredDate() {
-    return this.expiredDate;
+    return this.#expiredDate;
   }
   getBirthDay() {
-    return this.birthDay;
+    return this.#birthDay;
   }
   getPrice() {
-    return this.usedPrice;
+    return this.#usedPrice;
   }
   getInfo() {
     return {
@@ -67,7 +67,7 @@ class Card {
     if (price < 0) {
       throw new InvalidError(price);
     }
-    this.usedPrice += price;
+    this.#usedPrice += price;
   }
 
   copy() {

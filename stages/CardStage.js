@@ -8,11 +8,11 @@ class CardStage {
 
   run() {
     logDivider();
-    if (Card.isCard(this.getCard())) {
+    if (Card.isCard(this.#getCard())) {
       log(
-        `💵💵💵💵💵 [현재까지 사용한 금액: ${this.getCard().getPrice()}원] 💵💵💵💵💵\n`
+        `💵💵💵💵💵 [현재까지 사용한 금액: ${this.#getCard().getPrice()}원] 💵💵💵💵💵\n`
       );
-      this.done();
+      this.#done();
     } else {
       this.logMessage();
     }
@@ -28,12 +28,12 @@ class CardStage {
 
   do(command) {
     if (command === COMMAND.IN_PROGRESS) {
-      if (Card.isCard(this.getCard())) {
+      if (Card.isCard(this.#getCard())) {
         logDivider();
         log("카드 등록이 정상적으로 완료되었습니다.");
         log("결제를 진행하시려면 '결제'를 입력해 주세요.");
         logDivider();
-        return this.getCard();
+        return this.#getCard();
       }
       logDivider();
       this.logInvalidatedValue("🚨 카드 정보가 존재하지 않습니다. 🚨");
@@ -55,16 +55,17 @@ class CardStage {
       );
       throw new InvalidError(command);
     }
-    const [number, expiredDate, birthDay] = command.split(":");
 
+    const [number, expiredDate, birthDay] = command.split(":");
     this.setCard(new Card(number, expiredDate, birthDay));
+
     logDivider();
-    this.done();
+    this.#done();
     logDivider();
   }
 
-  done() {
-    const card = this.getCard();
+  #done() {
+    const card = this.#getCard();
     log(`고객님의 카드 정보는 다음과 같습니다.\n`);
     log(`- 카드번호: ${card.getNumber()}`);
     log(`- 만료일: ${card.getExpiredDate()}`);
@@ -82,11 +83,11 @@ class CardStage {
 
   copy() {
     const newCardStage = new CardStage();
-    newCardStage.setCard(this.getCard().copy());
+    newCardStage.setCard(this.#getCard().copy());
     return newCardStage;
   }
 
-  getCard() {
+  #getCard() {
     return this.card;
   }
   setCard(card) {
