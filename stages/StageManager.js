@@ -60,7 +60,7 @@ class StageManager {
       this.#progressStage(command);
     } else if (status === STATUS.DONE) {
       if (!this.#validStageKey(command)) {
-        throw new NotFoundError(key);
+        throw new NotFoundError(command);
       }
 
       const key = StageManager.#STAGE_MAPPER[command].key;

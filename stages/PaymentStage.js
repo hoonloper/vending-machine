@@ -65,7 +65,6 @@ class PaymentStage {
 
   #logCashPayment(drink) {
     const cash = this.#getCash();
-    console.log(cash);
     log("- 타입: 현금");
     log(`- 입력한 금액: ${cash.getPrice()}원`);
     return {

@@ -60,7 +60,7 @@ class CardStage {
 
   #execute(command) {
     if (command.length !== Card.TOTAL_CARD_INFO_LENGTH) {
-      this.log("카드 정보를 잘못 입력하셨습니다.\n다시 시도해 주세요.");
+      log("카드 정보를 잘못 입력하셨습니다.\n다시 시도해 주세요.");
       throw new InvalidError(command);
     }
 
