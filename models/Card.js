@@ -80,11 +80,11 @@ class Card {
   }
 
   validCardNumber(number) {
-    return number.length === this.NUMBER_LENGTH && validNumberString(number);
+    return number.length === Card.NUMBER_LENGTH && validNumberString(number);
   }
 
   validExpiredDate(expired) {
-    if (!expired.includes("/") || expired.length !== this.EXPIRED_LENGTH) {
+    if (!expired.includes("/") || expired.length !== Card.EXPIRED_LENGTH) {
       return false;
     }
     const [expiredMonth, expiredYear] = expired.split("/");
@@ -105,14 +105,14 @@ class Card {
 
   validBirthDay(birthDay) {
     if (
-      birthDay.length !== this.BIRTH_DAY_LENGTH ||
+      birthDay.length !== Card.BIRTH_DAY_LENGTH ||
       !validNumberString(birthDay)
     ) {
       return false;
     }
     const year = Number(birthDay.slice(0, 2));
     const month = Number(birthDay.slice(2, 4));
-    const day = Number(birthDay.slice(4, this.BIRTH_DAY_LENGTH));
+    const day = Number(birthDay.slice(4, Card.BIRTH_DAY_LENGTH));
 
     return (
       year <= 99 &&

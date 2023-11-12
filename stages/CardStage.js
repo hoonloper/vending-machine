@@ -1,6 +1,6 @@
 const { InvalidError, ServerError } = require("../common/CustomError");
 const { COMMAND } = require("../common/constant");
-const { log, logDivider } = require("../common/utils");
+const { log, logDivider, logs } = require("../common/utils");
 const Card = require("../models/Card");
 
 class CardStage {
@@ -27,32 +27,40 @@ class CardStage {
   }
 
   do(command) {
-    if (command === COMMAND.IN_PROGRESS) {
-      if (Card.isCard(this.#getCard())) {
-        logDivider();
-        log("카드 등록이 정상적으로 완료되었습니다.");
-        log("결제를 진행하시려면 '결제'를 입력해 주세요.");
-        logDivider();
-        return this.#getCard();
-      }
-      logDivider();
-      this.logInvalidatedValue("🚨 카드 정보가 존재하지 않습니다. 🚨");
-      this.logMessage();
-      logDivider();
-      throw new ServerError(command);
-    }
-    if (command === COMMAND.RETRY) {
-      this.setCard(null);
-      logDivider();
-      this.logMessage();
-      logDivider();
-      return null;
-    }
+    return command === COMMAND.IN_PROGRESS
+      ? this.progress()
+      : command === COMMAND.RETRY
+      ? this.retry()
+      : this.execute(command);
+  }
 
-    if (command.length !== Card.TOTAL_CARD_INFO_LENGTH) {
-      this.logInvalidatedValue(
-        "카드 정보를 잘못 입력하셨습니다.\n다시 시도해 주세요."
+  progress() {
+    if (Card.isCard(this.#getCard())) {
+      logDivider();
+      logs(
+        "카드 등록이 정상적으로 완료되었습니다.",
+        "결제를 진행하시려면 '결제'를 입력해 주세요."
       );
+      logDivider();
+      return this.#getCard();
+    }
+    logDivider();
+    log("🚨 카드 정보가 존재하지 않습니다. 🚨");
+    this.logMessage();
+    logDivider();
+  }
+
+  retry() {
+    this.setCard(null);
+    logDivider();
+    this.logMessage();
+    logDivider();
+    return null;
+  }
+
+  execute(command) {
+    if (command.length !== Card.TOTAL_CARD_INFO_LENGTH) {
+      this.log("카드 정보를 잘못 입력하셨습니다.\n다시 시도해 주세요.");
       throw new InvalidError(command);
     }
 
@@ -62,6 +70,7 @@ class CardStage {
     logDivider();
     this.#done();
     logDivider();
+    return null;
   }
 
   #done() {
@@ -73,12 +82,6 @@ class CardStage {
     log(
       `\n카드 결제 희망 - '${COMMAND.IN_PROGRESS}'\n정보 재입력 희망 - '${COMMAND.RETRY}'\n종료 - '${COMMAND.END}'`
     );
-  }
-
-  logInvalidatedValue(message) {
-    logDivider(true);
-    log(message);
-    logDivider(true);
   }
 
   copy() {
