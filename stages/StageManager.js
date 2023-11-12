@@ -3,6 +3,7 @@ const CardStage = require("./CardStage");
 const CashStage = require("./CashStage");
 const PaymentStage = require("./PaymentStage");
 const { STATUS, MODEL_KEY } = require("../common/constant");
+const { InvalidError, NotFoundError } = require("../common/CustomError");
 
 class StageManager {
   static STAGE_MAPPER = {
@@ -24,7 +25,7 @@ class StageManager {
   constructor(type = MODEL_KEY.DRINK, selectedStages = []) {
     this.setStage(this.getStages()[type] ?? null);
     if (this.getStage() === null) {
-      throw Error("INVALID:TYPE");
+      throw InvalidError("스테이지");
     }
     if (selectedStages.length === 0) {
       this.getStage().run();
@@ -121,7 +122,7 @@ class StageManager {
   validStageKey(key) {
     const hasKey = Object.keys(StageManager.STAGE_MAPPER).includes(key);
     if (!hasKey) {
-      throw Error("NOT_FOUND:COMMAND");
+      throw NotFoundError("키워드");
     }
   }
 }

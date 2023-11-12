@@ -1,3 +1,4 @@
+const { InvalidError, ServerError } = require("../common/CustomError");
 const { MODEL_KEY, STATUS, COMMAND } = require("../common/constant");
 const { log, logDivider } = require("../common/utils");
 const Card = require("../models/Card");
@@ -32,7 +33,7 @@ class PaymentStage {
         logDivider();
         log("🚨🚨🚨 금액 부족 🚨🚨🚨");
         logDivider();
-        throw Error("FAIL:NOT_ENOUGH");
+        throw ServerError("금액이 충분하지 않음");
       }
       this.cash.decrease(drinkPrice);
       changeText = `- 잔액: ${this.cash.getPrice()}원`;
@@ -65,7 +66,7 @@ class PaymentStage {
       this.cash = selectedList[1];
       this.type = MODEL_KEY.CASH;
     } else {
-      throw Error("INVALID:PAYMENT");
+      throw InvalidError("결제");
     }
   }
 
