@@ -17,17 +17,15 @@ class Card {
     if (!this.validCardNumber(number)) {
       throw new InvalidError(number);
     }
-    this.number = number;
-
-    console.log(expiredDate);
     if (!this.validExpiredDate(expiredDate)) {
       throw new InvalidError(expiredDate);
     }
-    this.expiredDate = expiredDate;
-
     if (!this.validBirthDay(birthDay)) {
       throw new InvalidError(birthDay);
     }
+
+    this.number = number;
+    this.expiredDate = expiredDate;
     this.birthDay = birthDay;
     this.usedPrice = usedPrice;
   }
@@ -82,43 +80,48 @@ class Card {
   }
 
   validCardNumber(number) {
-    return number.length === 16 && validNumberString(number);
+    return number.length === this.NUMBER_LENGTH && validNumberString(number);
   }
 
   validExpiredDate(expired) {
-    if (!expired.includes("/") || expired.length !== 5) {
+    if (!expired.includes("/") || expired.length !== this.EXPIRED_LENGTH) {
       return false;
     }
     const [expiredMonth, expiredYear] = expired.split("/");
     const isExpiredMonth =
-      expiredMonth.length === 2 && validNumberString(expiredMonth);
-    const isExpiredYear =
-      expiredYear.length === 2 && validNumberString(expiredYear);
+      expiredMonth.length === 2 &&
+      validNumberString(expiredMonth) &&
+      Number(expiredMonth) <= 12 &&
+      Number(expiredMonth) > 0;
     const currentYear = Number(new Date().getFullYear().toString().slice(2));
-    if (
-      !isExpiredMonth ||
-      !isExpiredYear ||
-      Number(expiredMonth) > 12 ||
-      Number(expiredMonth) < 1 ||
-      expiredYear > 99 ||
-      currentYear > expiredYear
-    ) {
-      return false;
-    }
-    return true;
+    const isExpiredYear =
+      expiredYear.length === 2 &&
+      validNumberString(expiredYear) &&
+      Number(expiredYear) <= 99 &&
+      Number(expiredYear) >= currentYear;
+
+    return isExpiredMonth && isExpiredYear;
   }
 
   validBirthDay(birthDay) {
-    if (birthDay.length !== 6 || !validNumberString(birthDay)) {
+    if (
+      birthDay.length !== this.BIRTH_DAY_LENGTH ||
+      !validNumberString(birthDay)
+    ) {
       return false;
     }
     const year = Number(birthDay.slice(0, 2));
     const month = Number(birthDay.slice(2, 4));
-    const day = Number(birthDay.slice(4, 6));
-    if (year > 99 || month > 12 || month < 1 || day > 31 || day < 1) {
-      return false;
-    }
-    return true;
+    const day = Number(birthDay.slice(4, this.BIRTH_DAY_LENGTH));
+
+    return (
+      year <= 99 &&
+      year >= 0 &&
+      month <= 12 &&
+      month >= 1 &&
+      day <= 31 &&
+      day >= 1
+    );
   }
 
   hasPrice() {

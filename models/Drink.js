@@ -10,14 +10,14 @@ class Drink {
     if (!validFilledString(name)) {
       throw new InvalidError(name);
     }
-    this.name = name;
     if (!validStrictNumber(price) || price < 0) {
       throw new InvalidError(price);
     }
-    this.price = price;
     if (!validStrictNumber(count) || count < 0) {
       throw new InvalidError(count);
     }
+    this.name = name;
+    this.price = price;
     this.count = count;
   }
 

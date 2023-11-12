@@ -6,15 +6,15 @@ const DrinkManager = require("../models/DrinkManager");
 
 class DrinkStage {
   drinkManager;
-  selectedDrink;
+  selectedDrink = null;
 
   constructor() {
     this.drinkManager = new DrinkManager();
   }
 
   do(command) {
-    if (this.getDrinkManager().getDrinkByName(command) !== null) {
-      const drink = this.getDrinkManager().getDrinkByName(command);
+    const drink = this.getDrinkManager().getDrinkByName(command);
+    if (Drink.isDrink(drink)) {
       this.setSelectedDrink(drink);
       logDivider();
       log(
@@ -23,7 +23,7 @@ class DrinkStage {
       logDivider();
       return null;
     }
-    if (!Drink.isDrink(this.selectedDrink)) {
+    if (!Drink.isDrink(this.getSelectedDrink())) {
       throw new InvalidError(command);
     }
     if (COMMAND.IN_PROGRESS === command) {

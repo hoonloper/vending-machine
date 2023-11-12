@@ -25,6 +25,7 @@ class PaymentStage {
   payWith(type) {
     const drinkPrice = this.drink.getPrice();
     let changeText = 0;
+
     if (type === MODEL_KEY.CARD) {
       this.card.increase(drinkPrice);
       changeText = `- 현재까지 사용 금액: ${this.card.getPrice()}`;
@@ -52,20 +53,20 @@ class PaymentStage {
     this.logMessage();
   }
 
-  init(selectedList) {
-    if (!Array.isArray(selectedList) || selectedList.length !== 2) {
+  init(selectedStages) {
+    if (!Array.isArray(selectedStages) || selectedStages.length !== 2) {
       return null;
     }
 
-    this.drink = selectedList[0];
-    if (selectedList[1] instanceof Card) {
-      this.card = selectedList[1];
+    this.drink = selectedStages[0];
+    if (Card.isCard(selectedStages[1])) {
+      this.card = selectedStages[1];
       this.type = MODEL_KEY.CARD;
-    } else if (selectedList[1] instanceof Cash) {
-      this.cash = selectedList[1];
+    } else if (Cash.isCash(selectedStages[1])) {
+      this.cash = selectedStages[1];
       this.type = MODEL_KEY.CASH;
     } else {
-      throw new InvalidError(selectedList);
+      throw new InvalidError(selectedStages);
     }
   }
 

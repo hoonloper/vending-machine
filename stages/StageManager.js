@@ -120,8 +120,7 @@ class StageManager {
   }
 
   validStageKey(key) {
-    const hasKey = Object.keys(StageManager.STAGE_MAPPER).includes(key);
-    if (!hasKey) {
+    if (StageManager.STAGE_MAPPER in key) {
       throw new NotFoundError(key);
     }
   }

@@ -4,7 +4,7 @@ const { log, logDivider } = require("../common/utils");
 const Card = require("../models/Card");
 
 class CardStage {
-  card;
+  card = null;
 
   run() {
     logDivider();
@@ -64,10 +64,11 @@ class CardStage {
   }
 
   done() {
+    const card = this.getCard();
     log(`고객님의 카드 정보는 다음과 같습니다.\n`);
-    log(`- 카드번호: ${this.getCard().getNumber()}`);
-    log(`- 만료일: ${this.getCard().getExpiredDate()}`);
-    log(`- 생년월일: ${this.getCard().getBirthDay()}`);
+    log(`- 카드번호: ${card.getNumber()}`);
+    log(`- 만료일: ${card.getExpiredDate()}`);
+    log(`- 생년월일: ${card.getBirthDay()}`);
     log(
       `\n카드 결제 희망 - '${COMMAND.IN_PROGRESS}'\n정보 재입력 희망 - '${COMMAND.RETRY}'\n종료 - '${COMMAND.END}'`
     );
