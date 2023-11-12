@@ -63,7 +63,7 @@ class Card {
     };
   }
 
-  increase(price) {
+  increasePrice(price) {
     if (price < 0) {
       throw new InvalidError(price);
     }

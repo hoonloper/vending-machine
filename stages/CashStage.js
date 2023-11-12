@@ -43,7 +43,7 @@ class CashStage {
 
     const cash = Number(command);
     if (Cash.isCash(this.getCash())) {
-      this.getCash().increase(cash);
+      this.getCash().increasePrice(cash);
       logDivider();
       log("더해진 금액: ", this.getCash().getPrice());
       log("결제를 진행하시려면 '진행'을 입력해 주세요.");

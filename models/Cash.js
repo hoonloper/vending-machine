@@ -14,10 +14,10 @@ class Cash {
   getPrice() {
     return this.price;
   }
-  increase(price) {
+  increasePrice(price) {
     this.price += price;
   }
-  decrease(price) {
+  decreasePrice(price) {
     if (!this.checkPriceRange(price)) {
       throw new InvalidError(price);
     }

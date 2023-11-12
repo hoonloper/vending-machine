@@ -27,7 +27,7 @@ class PaymentStage {
     let changeText = 0;
 
     if (type === MODEL_KEY.CARD) {
-      this.card.increase(drinkPrice);
+      this.card.increasePrice(drinkPrice);
       changeText = `- 현재까지 사용 금액: ${this.card.getPrice()}`;
     } else if (type === MODEL_KEY.CASH) {
       if (!this.cash.checkPriceRange(drinkPrice)) {
@@ -36,7 +36,7 @@ class PaymentStage {
         logDivider();
         throw new ServerError(drinkPrice);
       }
-      this.cash.decrease(drinkPrice);
+      this.cash.decreasePrice(drinkPrice);
       changeText = `- 잔액: ${this.cash.getPrice()}원`;
     }
     this.drink.decreaseCount();
