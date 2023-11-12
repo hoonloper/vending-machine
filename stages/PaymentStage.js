@@ -80,7 +80,7 @@ class PaymentStage {
       logDivider(true);
       log("- 타입: 카드");
       const formattedNumber = this.card.formatNumber(
-        this.card.blurNumber(this.card.getNumber())
+        this.card.maskNumber(this.card.getNumber())
       );
       log(`- 카드 번호: ${formattedNumber}`);
       log(`- 현재까지 사용한 금액: ${this.card.getPrice()}원`);

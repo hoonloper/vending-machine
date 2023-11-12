@@ -37,9 +37,9 @@ class Card {
     return number.replace(/(.{4})/g, "$1-").slice(0, -1);
   }
   /**
-   * @returns 'xxxxxxxx****xxxx' 형태로 블러
+   * @returns 'xxxxxxxx****xxxx' 형태로 가리기
    */
-  blurNumber(number) {
+  maskNumber(number) {
     return number.slice(0, 8) + "****" + number.slice(12);
   }
   getNumber() {
@@ -56,7 +56,7 @@ class Card {
   }
   getInfo() {
     return {
-      number: this.formatNumber(this.blurNumber(this.getNumber())),
+      number: this.formatNumber(this.maskNumber(this.getNumber())),
       expiredDate: this.getExpiredDate(),
       birthDay: this.getBirthDay(),
       price: this.getPrice(),
