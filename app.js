@@ -77,8 +77,10 @@ class Application {
           InvalidError.isError(error) ||
           NotFoundError.isError(error)
         ) {
+          logDivider(true);
           error.logMessage();
-          return;
+          logDivider(true);
+          return null;
         }
         logDivider(true);
         log("🚨 알 수 없는 에러입니다. 🚨");
