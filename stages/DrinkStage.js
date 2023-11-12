@@ -19,19 +19,21 @@ class DrinkStage {
         `구매 희망 - '${COMMAND.IN_PROGRESS}'\n다시 선택 - '${COMMAND.RETRY}'`
       );
       logDivider();
-    } else if (COMMAND.IN_PROGRESS === command) {
+    }
+    if (COMMAND.IN_PROGRESS === command) {
       logDivider();
       log("결제 수단\n- '카드'\n- '현금'");
       logDivider();
       return this.getSelectedDrink();
-    } else if (COMMAND.RETRY === command) {
+    }
+    if (COMMAND.RETRY === command) {
       this.setSelectedDrink(null);
       return null;
-    } else {
-      logDivider();
-      log("해당 음료가 존재하지 않습니다.");
-      logDivider();
     }
+
+    logDivider();
+    log("해당 음료가 존재하지 않습니다.");
+    logDivider();
   }
   getDrinkManager() {
     return this.drinkManager;
@@ -52,7 +54,7 @@ class DrinkStage {
       logDivider();
       log("현재 자판기에 비치된 음료가 없습니다.");
       logDivider();
-      return;
+      return null;
     }
     const message = this.getDrinkManager()
       .getDrinkList()
