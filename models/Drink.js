@@ -30,6 +30,9 @@ class Drink {
   getCount() {
     return this.#count;
   }
+  hasCount() {
+    return this.getCount() > 0;
+  }
 
   decreaseCount() {
     this.#count--;

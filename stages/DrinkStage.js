@@ -37,9 +37,13 @@ class DrinkStage {
 
   do(command) {
     const drink = this.#getDrinkManager().getDrinkByName(command);
-    return Drink.isDrink(drink)
+    return !Drink.isDrink(drink)
+      ? (logDivider(), log("음료 이름을 다시 입력해 주세요."), logDivider())
+      : drink.hasCount()
       ? this.#execute(drink)
-      : (logDivider(), log("음료 이름을 다시 입력해 주세요."), logDivider());
+      : (logDivider(),
+        log(`${drink.getName()}은(는) 품절입니다. 다른 음료를 선택해 주세요.`),
+        logDivider());
   }
 
   #execute(drink) {
