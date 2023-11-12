@@ -12,34 +12,44 @@ class DrinkStage {
     this.#drinkManager = new DrinkManager();
   }
 
+  run() {
+    this.logMessage();
+  }
+
+  logMessage() {
+    logDivider();
+    const drinkList = this.#getDrinkManager().getDrinkList();
+    if (drinkList.length <= 0) {
+      log("현재 자판기에 비치된 음료가 없습니다.");
+    } else {
+      const message = drinkList
+        .map(
+          (drink) =>
+            `- ${drink.getName()}: ${drink.getPrice()}원 / ${drink.getCount()}개`
+        )
+        .join("\n");
+      log(message);
+    }
+    logDivider();
+
+    return null;
+  }
+
   do(command) {
     const drink = this.#getDrinkManager().getDrinkByName(command);
-    if (Drink.isDrink(drink)) {
-      this.setSelectedDrink(drink);
-      logDivider();
-      log(
-        `구매 희망 - '${COMMAND.IN_PROGRESS}'\n다시 선택 - '${COMMAND.RETRY}'`
-      );
-      logDivider();
-      return null;
-    }
-    if (!Drink.isDrink(this.#getSelectedDrink())) {
-      throw new InvalidError(command);
-    }
-    if (COMMAND.IN_PROGRESS === command) {
-      logDivider();
-      log("결제 수단\n- '카드'\n- '현금'");
-      logDivider();
-      return this.#getSelectedDrink();
-    }
-    if (COMMAND.RETRY === command) {
-      this.setSelectedDrink(null);
-      this.logMessage();
-      return null;
-    }
-
-    throw new InvalidError(command);
+    return Drink.isDrink(drink)
+      ? this.#execute(drink)
+      : (logDivider(), log("음료 이름을 다시 입력해 주세요."), logDivider());
   }
+
+  #execute(drink) {
+    this.setSelectedDrink(drink);
+    logDivider();
+    log("결제 수단\n- '카드'\n- '현금'");
+    logDivider();
+    return this.#getSelectedDrink();
+  }
+
   #getDrinkManager() {
     return this.#drinkManager;
   }
@@ -48,29 +58,6 @@ class DrinkStage {
   }
   setSelectedDrink(drink) {
     this.#selectedDrink = drink;
-  }
-
-  run() {
-    this.logMessage();
-  }
-
-  logMessage() {
-    if (this.#getDrinkManager().getDrinkList().length <= 0) {
-      logDivider();
-      log("현재 자판기에 비치된 음료가 없습니다.");
-      logDivider();
-      return null;
-    }
-    const message = this.#getDrinkManager()
-      .getDrinkList()
-      .map(
-        (drink) =>
-          `- ${drink.getName()}: ${drink.getPrice()}원 / ${drink.getCount()}개`
-      )
-      .join("\n");
-    logDivider();
-    log(message);
-    logDivider();
   }
 
   copy() {
