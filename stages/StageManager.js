@@ -25,7 +25,7 @@ class StageManager {
   constructor(type = MODEL_KEY.DRINK, selectedStages = []) {
     this.setStage(this.getStages()[type] ?? null);
     if (this.getStage() === null) {
-      throw InvalidError("스테이지");
+      throw new InvalidError(type);
     }
     if (selectedStages.length === 0) {
       this.getStage().run();
@@ -122,7 +122,7 @@ class StageManager {
   validStageKey(key) {
     const hasKey = Object.keys(StageManager.STAGE_MAPPER).includes(key);
     if (!hasKey) {
-      throw NotFoundError("키워드");
+      throw new NotFoundError(key);
     }
   }
 }

@@ -33,7 +33,7 @@ class PaymentStage {
         logDivider();
         log("🚨🚨🚨 금액 부족 🚨🚨🚨");
         logDivider();
-        throw ServerError("금액이 충분하지 않음");
+        throw new ServerError(drinkPrice);
       }
       this.cash.decrease(drinkPrice);
       changeText = `- 잔액: ${this.cash.getPrice()}원`;
@@ -53,7 +53,6 @@ class PaymentStage {
   }
 
   init(selectedList) {
-    log("init ", selectedList);
     if (!Array.isArray(selectedList) || selectedList.length !== 2) {
       return null;
     }
@@ -66,7 +65,7 @@ class PaymentStage {
       this.cash = selectedList[1];
       this.type = MODEL_KEY.CASH;
     } else {
-      throw InvalidError("결제");
+      throw new InvalidError(selectedList);
     }
   }
 

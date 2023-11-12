@@ -1,4 +1,4 @@
-const { InvalidError } = require("../common/CustomError");
+const { InvalidError, ServerError } = require("../common/CustomError");
 const { COMMAND } = require("../common/constant");
 const { log, logDivider } = require("../common/utils");
 const Card = require("../models/Card");
@@ -39,7 +39,7 @@ class CardStage {
       this.logInvalidatedValue("🚨 카드 정보가 존재하지 않습니다. 🚨");
       this.logMessage();
       logDivider();
-      return null;
+      throw new ServerError(command);
     }
     if (command === COMMAND.RETRY) {
       this.setCard(null);
@@ -51,22 +51,13 @@ class CardStage {
 
     if (command.length !== Card.TOTAL_CARD_INFO_LENGTH) {
       this.logInvalidatedValue(
-        "카드 정보를 잘못 입력하셨습니다.\n 다시 시도해 주세요."
+        "카드 정보를 잘못 입력하셨습니다.\n다시 시도해 주세요."
       );
-      return null;
+      throw new InvalidError(command);
     }
     const [number, expiredDate, birthDay] = command.split(":");
-    try {
-      this.setCard(new Card(number, expiredDate, birthDay));
-    } catch (error) {
-      if (error instanceof InvalidError) {
-        const [_, message] = error.split(":");
-        this.logInvalidatedValue(message);
-        return;
-      }
-      throw error;
-    }
 
+    this.setCard(new Card(number, expiredDate, birthDay));
     logDivider();
     this.done();
     logDivider();

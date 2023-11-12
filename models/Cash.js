@@ -6,7 +6,7 @@ class Cash {
 
   constructor(price) {
     if (!validStrictNumber(price)) {
-      throw InvalidError("현금");
+      throw new InvalidError(price);
     }
     this.price = price;
   }
@@ -19,7 +19,7 @@ class Cash {
   }
   decrease(price) {
     if (!this.checkPriceRange(price)) {
-      throw InvalidError("가격");
+      throw new InvalidError(price);
     }
     this.price -= price;
   }

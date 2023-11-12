@@ -1,5 +1,7 @@
+const { InvalidError } = require("../common/CustomError");
 const { COMMAND } = require("../common/constant");
 const { log, logDivider } = require("../common/utils");
+const Drink = require("../models/Drink");
 const DrinkManager = require("../models/DrinkManager");
 
 class DrinkStage {
@@ -21,6 +23,9 @@ class DrinkStage {
       logDivider();
       return null;
     }
+    if (!Drink.isDrink(this.selectedDrink)) {
+      throw new InvalidError(command);
+    }
     if (COMMAND.IN_PROGRESS === command) {
       logDivider();
       log("결제 수단\n- '카드'\n- '현금'");
@@ -29,12 +34,11 @@ class DrinkStage {
     }
     if (COMMAND.RETRY === command) {
       this.setSelectedDrink(null);
+      this.logMessage();
       return null;
     }
 
-    logDivider();
-    log("해당 음료가 존재하지 않습니다.");
-    logDivider();
+    throw new InvalidError(command);
   }
   getDrinkManager() {
     return this.drinkManager;

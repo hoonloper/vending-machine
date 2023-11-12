@@ -15,18 +15,18 @@ class Card {
 
   constructor(number, expiredDate, birthDay, usedPrice = 0) {
     if (!this.validCardNumber(number)) {
-      throw InvalidError("카드 번호");
+      throw new InvalidError(number);
     }
     this.number = number;
 
     console.log(expiredDate);
     if (!this.validExpiredDate(expiredDate)) {
-      throw InvalidError("만료일자");
+      throw new InvalidError(expiredDate);
     }
     this.expiredDate = expiredDate;
 
     if (!this.validBirthDay(birthDay)) {
-      throw InvalidError("생년월일");
+      throw new InvalidError(birthDay);
     }
     this.birthDay = birthDay;
     this.usedPrice = usedPrice;
@@ -67,7 +67,7 @@ class Card {
 
   increase(price) {
     if (price < 0) {
-      throw InvalidError("가격");
+      throw new InvalidError(price);
     }
     this.usedPrice += price;
   }

@@ -8,15 +8,15 @@ class Drink {
 
   constructor(name, price = 0, count = 0) {
     if (!validFilledString(name)) {
-      throw InvalidError("음료 이름");
+      throw new InvalidError(name);
     }
     this.name = name;
     if (!validStrictNumber(price) || price < 0) {
-      throw InvalidError("음료 가격");
+      throw new InvalidError(price);
     }
     this.price = price;
     if (!validStrictNumber(count) || count < 0) {
-      throw InvalidError("음료 개수");
+      throw new InvalidError(count);
     }
     this.count = count;
   }
