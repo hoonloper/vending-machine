@@ -45,6 +45,7 @@ class Application {
     readline.on("line", (command) => {
       // 끝 입력하면 언제든 종료
       if (command === COMMAND.END) {
+        launcher.logUsageHistory();
         closeWithLog(LauncherLogger.getByeMessage());
       }
 
@@ -79,19 +80,19 @@ class Application {
           logDivider();
         }
       } catch (error) {
-        if (
+        logDivider(true);
+
+        const isCustomError =
           ServerError.isError(error) ||
           InvalidError.isError(error) ||
-          NotFoundError.isError(error)
-        ) {
-          logDivider(true);
+          NotFoundError.isError(error);
+        if (isCustomError) {
           error.logMessage();
-          logDivider(true);
-          return null;
+        } else {
+          log("🚨 알 수 없는 에러입니다. 🚨");
+          log(error);
         }
-        logDivider(true);
-        log("🚨 알 수 없는 에러입니다. 🚨");
-        log(error);
+
         logDivider(true);
       } finally {
         readline.prompt();

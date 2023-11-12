@@ -34,7 +34,13 @@ class Launcher {
     }
     stageManagerHistory.forEach((history, index) => {
       logDivider();
-      log(`📄 ${index + 1}번째 사용 내역은\n`);
+      log(
+        `📄 ${
+          index === stageManagerHistory.length - 1
+            ? "마지막"
+            : `${index + 1}번째`
+        } 사용 내역은\n`
+      );
 
       let beforeDrinkPrice = 0;
       history.getSelectedStages().forEach((stage) => {

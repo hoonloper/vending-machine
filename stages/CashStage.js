@@ -36,6 +36,8 @@ class CashStage {
       .join("\n");
     log(message);
     log(prices);
+
+    return null;
   }
 
   do(command) {
