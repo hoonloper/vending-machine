@@ -122,7 +122,7 @@ class StageManager {
   }
 
   validStageKey(key) {
-    return this.STAGE_MAPPER.hasOwnProperty(key);
+    return StageManager.STAGE_MAPPER.hasOwnProperty(key);
   }
 }
 
