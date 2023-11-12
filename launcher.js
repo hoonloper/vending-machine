@@ -67,8 +67,8 @@ class Launcher {
       });
 
       log("입니다.");
-      logDivider();
     });
+    logDivider();
   }
 
   #getStageManager() {
