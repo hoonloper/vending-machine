@@ -28,13 +28,13 @@ class CardStage {
 
   do(command) {
     return command === COMMAND.IN_PROGRESS
-      ? this.progress()
+      ? this.#progress()
       : command === COMMAND.RETRY
-      ? this.retry()
-      : this.execute(command);
+      ? this.#retry()
+      : this.#execute(command);
   }
 
-  progress() {
+  #progress() {
     if (Card.isCard(this.#getCard())) {
       logDivider();
       logs(
@@ -50,7 +50,7 @@ class CardStage {
     logDivider();
   }
 
-  retry() {
+  #retry() {
     this.setCard(null);
     logDivider();
     this.logMessage();
@@ -58,7 +58,7 @@ class CardStage {
     return null;
   }
 
-  execute(command) {
+  #execute(command) {
     if (command.length !== Card.TOTAL_CARD_INFO_LENGTH) {
       this.log("카드 정보를 잘못 입력하셨습니다.\n다시 시도해 주세요.");
       throw new InvalidError(command);
