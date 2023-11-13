@@ -1,10 +1,10 @@
 const { COMMAND } = require("../common/constant");
 const {
   log,
-  logDivider,
   validNumberString,
   validStrictNumber,
-  logs,
+  addLineBreakOfTexts,
+  getLoggingDivider,
 } = require("../common/utils");
 const Cash = require("../models/Cash");
 
@@ -13,31 +13,30 @@ class CashStage {
   #cash = null;
 
   run() {
-    logDivider();
     const cash = this.#getCash();
-    if (!Cash.isCash(cash)) {
-      this.logMessage();
-    } else if (cash.hasPrice()) {
-      log(`💵💵💵💵💵 [현재 잔액: ${cash.getPrice()}원] 💵💵💵💵💵\n`);
-      this.logMessage();
-      this.#logPayment();
-    } else {
-      log("잔액이 존재하지 않습니다.\n추가 현금을 입력해 주세요.");
-    }
-    logDivider();
+    const message = !Cash.isCash(cash)
+      ? this.getMessage()
+      : cash.hasPrice()
+      ? addLineBreakOfTexts(
+          `💵💵💵💵💵 [현재 잔액: ${cash.getPrice()}원] 💵💵💵💵💵\n`,
+          this.getMessage(),
+          this.#getPaymentText()
+        )
+      : "잔액이 존재하지 않습니다.\n추가 현금을 입력해 주세요.";
+
+    const divider = getLoggingDivider();
+    log(addLineBreakOfTexts(divider, message, divider));
 
     return null;
   }
 
-  logMessage() {
+  getMessage() {
     const message = `허용된 금액 단위 / ⭐️ 숫자만 입력해 주세요! ⭐️`;
-    const prices = this.#ALLOWED_CASH_LIST
+    const price = this.#ALLOWED_CASH_LIST
       .map((cash) => `- ${cash}원`)
       .join("\n");
-    log(message);
-    log(prices);
 
-    return null;
+    return addLineBreakOfTexts(message, price);
   }
 
   do(command) {
@@ -50,41 +49,49 @@ class CashStage {
 
   #progress() {
     const cash = this.#getCash();
-    if (Cash.isCash(cash)) {
-      logDivider();
-      log("현금이 정상적으로 입력되었습니다.");
-      log(`결제를 진행하시려면 '${COMMAND.PAY}'를 입력해 주세요.`);
-      logDivider();
-      return cash;
-    }
-    log("입력된 현금이 없습니다.");
-    return null;
+
+    const divider = getLoggingDivider();
+    const message = Cash.isCash(cash)
+      ? addLineBreakOfTexts(
+          divider,
+          "현금이 정상적으로 입력되었습니다.",
+          `결제를 진행하시려면 '${COMMAND.PAY}'를 입력해 주세요.`,
+          divider
+        )
+      : "입력된 현금이 없습니다.";
+    log(message);
+
+    return Cash.isCash(cash) ? cash : null;
   }
 
   #execute(command) {
     const cash = this.#getCash();
     const commandCash = Number(command);
+    const divider = getLoggingDivider();
+
     if (Cash.isCash(cash)) {
       cash.increasePrice(commandCash);
-      logDivider();
-      logs(
+
+      const message = addLineBreakOfTexts(
+        divider,
         `더해진 금액: ${cash.getPrice()}원`,
-        "결제를 진행하시려면 '진행'을 입력해 주세요."
+        "결제를 진행하시려면 '진행'을 입력해 주세요.",
+        divider
       );
-      logDivider();
+      log(message);
+
       return null;
     }
+
     this.#setCash(new Cash(commandCash));
-    logDivider();
-    this.#logPayment();
-    logDivider();
+
+    log(addLineBreakOfTexts(divider, this.#getPaymentText(), divider));
+
     return null;
   }
 
-  #logPayment() {
-    log(
-      `금액 추가 - 새로운 금액\n결제 진행 - '${COMMAND.IN_PROGRESS}'\n환불 - '${COMMAND.END}'`
-    );
+  #getPaymentText() {
+    return `금액 추가 - 새로운 금액\n결제 진행 - '${COMMAND.IN_PROGRESS}'\n환불 - '${COMMAND.END}'`;
   }
 
   #getCash() {
@@ -96,20 +103,22 @@ class CashStage {
 
   #validCash(command) {
     const cash = Number(command);
+
     return validStrictNumber(cash) && this.#ALLOWED_CASH_LIST.includes(cash);
   }
   #invalidCommand(message) {
-    logDivider();
-    log(message);
-    logDivider();
-    this.logMessage();
-    logDivider();
+    const divider = getLoggingDivider();
+    log(
+      addLineBreakOfTexts(divider, message, divider, this.getMessage(), divider)
+    );
+
     return null;
   }
 
   copy() {
     const newCashStage = new CashStage();
     newCashStage.#setCash(this.#getCash().copy());
+
     return newCashStage();
   }
 }
