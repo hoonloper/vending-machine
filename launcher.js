@@ -1,9 +1,5 @@
 const { log } = require("console");
-const {
-  logDivider,
-  addLineBreakOfTexts,
-  getLoggingDivider,
-} = require("./common/utils");
+const { addLineBreakOfTexts, getLoggingDivider } = require("./common/utils");
 const StageManager = require("./stages/StageManager");
 const Drink = require("./models/Drink");
 const Cash = require("./models/Cash");
@@ -66,7 +62,9 @@ class Launcher {
         ? makeDrinkText(stage)
         : Cash.isCash(stage)
         ? makeCashText(stage)
-        : makeCardText(stage);
+        : Card.isCard(stage)
+        ? makeCardText(stage)
+        : "알 수 없는 에러";
     }
     function makeDrinkText(stage) {
       beforeDrinkPrice = stage.getPrice();
