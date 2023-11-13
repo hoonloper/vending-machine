@@ -1,5 +1,5 @@
-const { log } = require("console");
 const { COMMAND } = require("./common/constant");
+const { log } = require("./common/utils");
 
 class LauncherLogger {
   static #welcomeMessage =

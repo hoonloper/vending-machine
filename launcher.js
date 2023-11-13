@@ -1,5 +1,8 @@
-const { log } = require("console");
-const { addLineBreakOfTexts, getLoggingDivider } = require("./common/utils");
+const {
+  addLineBreakOfTexts,
+  getLoggingDivider,
+  log,
+} = require("./common/utils");
 const StageManager = require("./stages/StageManager");
 const Drink = require("./models/Drink");
 const Cash = require("./models/Cash");
