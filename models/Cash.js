@@ -5,7 +5,7 @@ class Cash {
   #price;
 
   constructor(price) {
-    if (!validStrictNumber(price)) {
+    if (!validStrictNumber(price) || price < 0) {
       throw new InvalidError(price);
     }
     this.#price = price;
