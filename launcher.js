@@ -1,5 +1,9 @@
 const { log } = require("console");
-const { logDivider } = require("./common/utils");
+const {
+  logDivider,
+  addLineBreakOfTexts,
+  getLoggingDivider,
+} = require("./common/utils");
 const StageManager = require("./stages/StageManager");
 const Drink = require("./models/Drink");
 const Cash = require("./models/Cash");
@@ -32,43 +36,61 @@ class Launcher {
     if (stageManagerHistory.length === 0) {
       return;
     }
-    stageManagerHistory.forEach((history, index) => {
-      logDivider();
-      log(
-        `📄 ${
+
+    let beforeDrinkPrice = 0;
+    const usageHistory = stageManagerHistory
+      .map((history, index) => {
+        const historyTitle = `📄 ${
           index === stageManagerHistory.length - 1
             ? "마지막"
             : `${index + 1}번째`
-        } 사용 내역은\n`
-      );
+        } 사용 내역은\n`;
+        const historyText = history
+          .getSelectedStages()
+          .map(getStageTextMaker)
+          .join("\n");
+        const historyClosing = "입니다.";
 
-      let beforeDrinkPrice = 0;
-      history.getSelectedStages().forEach((stage) => {
-        if (Drink.isDrink(stage)) {
-          log("[구매 음료 정보]");
-          beforeDrinkPrice = stage.getPrice();
-          log(`- 음료: ${stage.getName()}`);
-          log(`- 가격: ${stage.getPrice()}원`);
-        }
-        if (Cash.isCash(stage)) {
-          log("[현금 결제 정보]");
-          log(`- 입력 금액: ${stage.getPrice() + beforeDrinkPrice}원`);
-          log(`- 잔액: ${stage.getPrice()}원`);
-        }
-        if (Card.isCard(stage)) {
-          log("[카드 결제 정보]");
-          const info = stage.getInfo();
-          log(`- 카드 번호: ${info.number}`);
-          log(`- 만료일: ${info.expiredDate}`);
-          log(`- 생년월일: ${info.birthDay}`);
-          log(`- 사용 금액: ${info.price}원`);
-        }
-        log("\n");
-      });
+        return addLineBreakOfTexts(
+          getLoggingDivider(),
+          historyTitle,
+          historyText,
+          historyClosing
+        );
+      })
+      .join("\n");
+    log(addLineBreakOfTexts(usageHistory, getLoggingDivider()));
 
-      log("입니다.");
-    });
-    logDivider();
+    function getStageTextMaker(stage) {
+      return Drink.isDrink(stage)
+        ? makeDrinkText(stage)
+        : Cash.isCash(stage)
+        ? makeCashText(stage)
+        : makeCardText(stage);
+    }
+    function makeDrinkText(stage) {
+      beforeDrinkPrice = stage.getPrice();
+      const title = "[구매 음료 정보]";
+      const name = `- 음료: ${stage.getName()}`;
+      const price = `- 가격: ${stage.getPrice()}원`;
+      return addLineBreakOfTexts(title, name, price, "\n");
+    }
+    function makeCashText(stage) {
+      const title = "[현금 결제 정보]";
+      const inputPrice = `- 입력 금액: ${
+        stage.getPrice() + beforeDrinkPrice
+      }원`;
+      const change = `- 잔액: ${stage.getPrice()}원`;
+      return addLineBreakOfTexts(title, inputPrice, change);
+    }
+    function makeCardText(stage) {
+      const title = "[카드 결제 정보]";
+      const number = `- 카드 번호: ${stage.getInfo().number}`;
+      const expiredDate = `- 만료일: ${stage.getInfo().expiredDate}`;
+      const birthDay = `- 생년월일: ${stage.getInfo().birthDay}`;
+      const price = `- 사용 금액: ${stage.getInfo().price}원`;
+      return addLineBreakOfTexts(title, number, expiredDate, birthDay, price);
+    }
   }
 
   #getStageManager() {

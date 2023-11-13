@@ -6,7 +6,7 @@ const logs = (...messages) => {
     log(message);
   });
 };
-const logDivider = (thin) => {
+const logDivider = (thin = false) => {
   if (thin) {
     log(
       "\n----------------------------------------------------------------------------\n"
@@ -17,6 +17,11 @@ const logDivider = (thin) => {
     );
   }
 };
+const getLoggingDivider = (thin = false) =>
+  thin
+    ? "\n----------------------------------------------------------------------------\n"
+    : "\n============================================================================\n";
+const addLineBreakOfTexts = (...texts) => texts.join("\n");
 
 const validString = (value) => typeof value === "string";
 
@@ -40,6 +45,8 @@ module.exports = {
   log,
   logs,
   logDivider,
+  getLoggingDivider,
+  addLineBreakOfTexts,
   validString,
   validNumber,
   validFilledString,
