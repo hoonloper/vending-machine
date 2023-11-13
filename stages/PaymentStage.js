@@ -1,6 +1,11 @@
 const { InvalidError, ServerError } = require("../common/CustomError");
 const { MODEL_KEY, STATUS, COMMAND } = require("../common/constant");
-const { log, logDivider } = require("../common/utils");
+const {
+  log,
+  logDivider,
+  getLoggingDivider,
+  addLineBreakOfTexts,
+} = require("../common/utils");
 const Card = require("../models/Card");
 const Cash = require("../models/Cash");
 
@@ -17,57 +22,68 @@ class PaymentStage {
   logMessage() {
     const drink = this.#getDrink();
     const type = this.#getType();
-
-    logDivider();
-    log("결제 수단");
-
-    logDivider(true);
-    const { change, message } =
+    const divider = getLoggingDivider();
+    const thinDivider = getLoggingDivider(true);
+    const paymentTitle = "결제 수단";
+    const { info, change, message } =
       type === MODEL_KEY.CARD
-        ? this.#logCardPayment(drink)
+        ? this.#getCardPaymentText(drink)
         : type === MODEL_KEY.CASH
-        ? this.#logCashPayment(drink)
-        : { change: "0", message: "" };
-    logDivider(true);
+        ? this.#getCashPayment(drink)
+        : { info: "", change: "0", message: "" };
+    const drinkText = addLineBreakOfTexts(
+      `음료 정보`,
+      `- 이름: ${drink.getName()}`,
+      `- 가격: ${drink.getPrice()}원`,
+      "- 개수: 1개"
+    );
+    const paymentHistoryText = addLineBreakOfTexts(
+      "\n결제 내역",
+      `- 금액: ${drink.getPrice()}원`,
+      `- 잔액: ${change}원`,
+      message
+    );
+    const paymentConfirm =
+      "⭐️ 결제 내역을 꼭 확인해 주세요.\n결제 확정 - '진행'\n결제 종료 - '끝'";
 
-    log(`음료 정보`);
-    log(`- 이름: ${drink.getName()}`);
-    log(`- 가격: ${drink.getPrice()}원`);
-    log("- 개수: 1개");
-
-    log("\n결제 내역");
-    log(`- 금액: ${drink.getPrice()}원`);
-    log(`- 잔액: ${change}원`);
-    log(message);
-
-    logDivider();
-    log("⭐️ 결제 내역을 꼭 확인해 주세요.");
-    log("결제 확정 - '진행'\n결제 종료 - '끝'");
-    logDivider();
+    const messages = [
+      divider,
+      paymentTitle,
+      thinDivider,
+      info,
+      thinDivider,
+      drinkText,
+      paymentHistoryText,
+      divider,
+      paymentConfirm,
+      divider,
+    ];
+    log(messages.join("\n"));
   }
 
-  #logCardPayment(drink) {
+  #getCardPaymentText(drink) {
     const card = this.#getCard();
     const formattedNumber = card.formatNumber(
       card.maskNumber(card.getNumber())
     );
 
-    logDivider(true);
-    log("- 타입: 카드");
-    log(`- 카드 번호: ${formattedNumber}`);
-    log(`- 현재까지 사용한 금액: ${card.getPrice()}원`);
+    const type = "- 타입: 카드";
+    const number = `- 카드 번호: ${formattedNumber}`;
+    const price = `- 현재까지 사용한 금액: ${card.getPrice()}원`;
 
     return {
+      info: addLineBreakOfTexts(getLoggingDivider(true), type, number, price),
       change: "-",
       message: `[${drink.getPrice()}원(카드사에 등록된 결제일에 결제될 예정)]`,
     };
   }
 
-  #logCashPayment(drink) {
+  #getCashPayment(drink) {
     const cash = this.#getCash();
-    log("- 타입: 현금");
-    log(`- 입력한 금액: ${cash.getPrice()}원`);
+    const type = "- 타입: 현금";
+    const price = `- 입력한 금액: ${cash.getPrice()}원`;
     return {
+      info: addLineBreakOfTexts(type, price),
       change: `${cash.getPrice() - drink.getPrice()}`,
       message: `[${cash.getPrice()}원(현재 금액) - ${drink.getPrice()}원(음료)]`,
     };
@@ -90,9 +106,9 @@ class PaymentStage {
     const drinkPrice = drink.getPrice();
     const paymentText =
       type === MODEL_KEY.CARD
-        ? this.#getCardPaymentText(drinkPrice)
+        ? this.#getDoneCardPaymentText(drinkPrice)
         : type === MODEL_KEY.CASH
-        ? this.#getCashPaymentText(drinkPrice)
+        ? this.#getDoneCashPaymentText(drinkPrice)
         : () => "";
 
     drink.decreaseCount();
@@ -105,13 +121,13 @@ class PaymentStage {
     return STATUS.COMPLETE;
   }
 
-  #getCardPaymentText(drinkPrice) {
+  #getDoneCardPaymentText(drinkPrice) {
     const card = this.#getCard();
     card.increasePrice(drinkPrice);
     return `- 현재까지 사용 금액: ${card.getPrice()}원`;
   }
 
-  #getCashPaymentText(drinkPrice) {
+  #getDoneCashPaymentText(drinkPrice) {
     const cash = this.#getCash();
     if (!cash.checkPriceRange(drinkPrice)) {
       logDivider();
