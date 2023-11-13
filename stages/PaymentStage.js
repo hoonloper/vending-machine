@@ -117,7 +117,7 @@ class PaymentStage {
         ? this.#getDoneCashPaymentText(drinkPrice)
         : () => "";
 
-    drink.decreaseCount();
+    drink.sold();
 
     const divider = getLoggingDivider();
     const doneText = `결제가 완료되었습니다.\n결제 내역\n- 금액: ${drinkPrice}원`;

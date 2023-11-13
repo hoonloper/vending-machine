@@ -34,10 +34,6 @@ class Drink {
     return this.getCount() > 0;
   }
 
-  decreaseCount() {
-    this.#count--;
-  }
-
   sold() {
     if (this.getCount() <= 0) {
       return null;
