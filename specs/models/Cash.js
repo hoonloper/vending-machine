@@ -1,4 +1,4 @@
-const { describe, it } = require("node:test");
+const { describe, it, beforeEach } = require("node:test");
 const assert = require("assert");
 const Card = require("../../models/Card");
 
@@ -13,6 +13,10 @@ describe("카드 모델 테스트", () => {
   const BIRTHDAY = "900101";
 
   describe("성공", () => {
+    let card = null;
+    beforeEach(() => {
+      card = new Card(NUMBER, EXPIRED_DATE, BIRTHDAY);
+    });
     it("카드 정적 상수", () => {
       assert.strictEqual(NUMBER_LENGTH, Card.NUMBER_LENGTH);
       assert.strictEqual(EXPIRED_LENGTH, Card.EXPIRED_LENGTH);
@@ -21,8 +25,6 @@ describe("카드 모델 테스트", () => {
     });
 
     it("카드 인스턴스 생성(기본 게터)", () => {
-      const card = new Card(NUMBER, EXPIRED_DATE, BIRTHDAY);
-
       assert.strictEqual(NUMBER, card.getNumber());
       assert.strictEqual(EXPIRED_DATE, card.getExpiredDate());
       assert.strictEqual(BIRTHDAY, card.getBirthDay());
@@ -30,17 +32,14 @@ describe("카드 모델 테스트", () => {
     });
 
     it("카드 형태 변환", () => {
-      const card = new Card(NUMBER, EXPIRED_DATE, BIRTHDAY);
       assert.strictEqual("1234-5678-8765-4321", card.formatNumber(NUMBER));
     });
 
     it("카드 마스킹", () => {
-      const card = new Card(NUMBER, EXPIRED_DATE, BIRTHDAY);
       assert.strictEqual("12345678****4321", card.maskNumber(NUMBER));
     });
 
     it("카드 정보 가져오기", () => {
-      const card = new Card(NUMBER, EXPIRED_DATE, BIRTHDAY);
       assert.deepStrictEqual(
         {
           number: card.formatNumber(card.maskNumber(NUMBER)),
@@ -53,7 +52,6 @@ describe("카드 모델 테스트", () => {
     });
 
     it("카드 사용 금액 증가", () => {
-      const card = new Card(NUMBER, EXPIRED_DATE, BIRTHDAY);
       const first = 10_000;
       const second = 20_000;
       const third = 30_000;
@@ -72,8 +70,6 @@ describe("카드 모델 테스트", () => {
     });
 
     it("카드 사용 금액 검증", () => {
-      const card = new Card(NUMBER, EXPIRED_DATE, BIRTHDAY);
-
       assert.equal(false, card.hasPrice());
 
       card.increasePrice(100);
