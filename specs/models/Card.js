@@ -1,6 +1,7 @@
 const { describe, it, beforeEach } = require("node:test");
 const assert = require("assert");
 const Card = require("../../models/Card");
+const { InvalidError, ServerError } = require("../../common/CustomError");
 
 describe("카드 모델 테스트", () => {
   const NUMBER_LENGTH = 16;
@@ -89,8 +90,65 @@ describe("카드 모델 테스트", () => {
     });
   });
   describe("실패", () => {
-    it("should work", () => {
-      assert.strictEqual(1, 1);
+    let card = null;
+    beforeEach(() => {
+      card = new Card(NUMBER, EXPIRED_DATE, BIRTHDAY);
+    });
+
+    it("잘못된 생성자 주입", () => {
+      assert.throws(
+        () => new Card(Number(NUMBER), EXPIRED_DATE, BIRTHDAY),
+        InvalidError
+      );
+      assert.throws(
+        () => new Card(NUMBER, EXPIRED_DATE + "222", BIRTHDAY),
+        InvalidError
+      );
+      assert.throws(
+        () => new Card(NUMBER, EXPIRED_DATE, Number(BIRTHDAY)),
+        InvalidError
+      );
+    });
+
+    it("카드 형태 변환 - 숫자 입력", () => {
+      assert.throws(() => card.formatNumber(Number(NUMBER)));
+    });
+
+    it("카드 마스킹 - 숫자 입력", () => {
+      assert.throws(() => card.maskNumber(Number(NUMBER)));
+    });
+
+    it("카드 사용 금액 증가 - 음수 입력", () => {
+      assert.throws(() => card.increasePrice(-1));
+    });
+
+    it("카드 번호 검증", () => {
+      assert.strictEqual(false, Card.validCardNumber());
+      assert.strictEqual(false, Card.validCardNumber(Number(NUMBER)));
+      assert.strictEqual(false, Card.validCardNumber(null));
+      assert.strictEqual(false, Card.validCardNumber(NUMBER + "1234"));
+      assert.strictEqual(false, Card.validCardNumber("#!%#%#$^#$@%1234"));
+    });
+
+    it("카드 만료일 검증", () => {
+      assert.strictEqual(false, Card.validExpiredDate());
+      assert.strictEqual(false, Card.validExpiredDate(null));
+      assert.strictEqual(false, Card.validExpiredDate(EXPIRED_DATE + "1234"));
+      assert.strictEqual(false, Card.validExpiredDate("/////"));
+      assert.strictEqual(false, Card.validExpiredDate("1/2/3"));
+      assert.strictEqual(false, Card.validExpiredDate("/121/"));
+      assert.strictEqual(false, Card.validExpiredDate("/1111"));
+    });
+
+    it("카드 생년월일 검증", () => {
+      console.log("검증");
+      assert.strictEqual(false, Card.validBirthDay());
+      assert.strictEqual(false, Card.validBirthDay(null));
+      assert.strictEqual(false, Card.validBirthDay(Number(BIRTHDAY)));
+      assert.strictEqual(false, Card.validBirthDay(BIRTHDAY + 123));
+      assert.strictEqual(false, Card.validBirthDay(BIRTHDAY + "123"));
+      assert.strictEqual(false, Card.validBirthDay(999999));
+      assert.strictEqual(false, Card.validBirthDay("999999"));
     });
   });
 });
