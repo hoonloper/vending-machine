@@ -88,6 +88,19 @@ describe("카드 모델 테스트", () => {
     it("카드 생년월일 검증", () => {
       assert.ok(Card.validBirthDay(BIRTHDAY));
     });
+
+    it("카드 복사 검증", () => {
+      const copyCard = card.copy();
+      assert.ok(copyCard instanceof Card);
+      assert.notStrictEqual(copyCard, card);
+      assert.strictEqual(true, copyCard !== card);
+      card.increasePrice(100);
+      assert.strictEqual(true, copyCard.getPrice() < card.getPrice());
+    });
+
+    it("카드 인스턴스 검증", () => {
+      assert.ok(Card.isCard(card));
+    });
   });
   describe("실패", () => {
     let card = null;
@@ -141,7 +154,6 @@ describe("카드 모델 테스트", () => {
     });
 
     it("카드 생년월일 검증", () => {
-      console.log("검증");
       assert.strictEqual(false, Card.validBirthDay());
       assert.strictEqual(false, Card.validBirthDay(null));
       assert.strictEqual(false, Card.validBirthDay(Number(BIRTHDAY)));
@@ -149,6 +161,10 @@ describe("카드 모델 테스트", () => {
       assert.strictEqual(false, Card.validBirthDay(BIRTHDAY + "123"));
       assert.strictEqual(false, Card.validBirthDay(999999));
       assert.strictEqual(false, Card.validBirthDay("999999"));
+    });
+
+    it("음료 인스턴스 검증", () => {
+      assert.strictEqual(false, Card.isCard(new Error()));
     });
   });
 });
