@@ -14,7 +14,7 @@ describe("음료 매니저 모델 테스트", () => {
   describe("성공", () => {
     let drinkManager = null;
     beforeEach(() => {
-      drinkManager = new DrinkManager(NAME, PRICE, COUNT);
+      drinkManager = new DrinkManager();
     });
 
     it("음료 매니저 인스턴스 생성(기본 게터)", () => {
@@ -28,6 +28,15 @@ describe("음료 매니저 모델 테스트", () => {
         assert.strictEqual(DRINK.getPrice(), drink.getPrice());
         assert.strictEqual(DRINK.getCount(), drink.getCount());
       });
+
+      drinkManager = new DrinkManager([new Drink("테스트", 1000, 1)]);
+      const drinkList = drinkManager.getDrinkList();
+      assert.strictEqual(1, drinkList.length);
+
+      const drink = drinkList[0];
+      assert.strictEqual("테스트", drink.getName());
+      assert.strictEqual(1000, drink.getPrice());
+      assert.strictEqual(1, drink.getCount());
     });
 
     it("음료 매니저 음료 이름 목록 가져오기", () => {
@@ -51,4 +60,37 @@ describe("음료 매니저 모델 테스트", () => {
       assert.strictEqual(true, copyDrinkManager !== drinkManager);
     });
   });
+  //   describe("실패", () => {
+  //     let drinkManager = null;
+  //     beforeEach(() => {
+  //       drinkManager = new DrinkManager(NAME, PRICE, COUNT);
+  //     });
+
+  //     it("잘못된 생성자 주입", () => {
+  //       assert.throws(() => new Drink(123, PRICE, COUNT), InvalidError);
+  //       assert.throws(() => new Drink(true, PRICE, COUNT), InvalidError);
+  //       assert.throws(() => new Drink(null, PRICE, COUNT), InvalidError);
+  //       assert.throws(() => new Drink(NAME, -1, COUNT), InvalidError);
+  //       assert.throws(() => new Drink(NAME, "1234", COUNT), InvalidError);
+  //       assert.throws(() => new Drink(NAME, true, COUNT), InvalidError);
+  //       assert.throws(() => new Drink(NAME, null, COUNT), InvalidError);
+  //       assert.throws(() => new Drink(NAME, PRICE, -1), InvalidError);
+  //       assert.throws(() => new Drink(NAME, PRICE, "1234"), InvalidError);
+  //       assert.throws(() => new Drink(NAME, PRICE, true), InvalidError);
+  //       assert.throws(() => new Drink(NAME, PRICE, null), InvalidError);
+  //     });
+
+  //     it("음료 품절일 때 구매", () => {
+  //       drink.sold();
+  //       drink.sold();
+  //       drink.sold();
+  //       drink.sold();
+  //       drink.sold();
+  //       assert.strictEqual(null, drink.sold());
+  //     });
+
+  //     it("음료 인스턴스 검증", () => {
+  //       assert.strictEqual(false, Drink.isDrink(new Error()));
+  //     });
+  //   });
 });
