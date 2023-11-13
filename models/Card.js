@@ -14,13 +14,13 @@ class Card {
   #usedPrice;
 
   constructor(number, expiredDate, birthDay, usedPrice = 0) {
-    if (!this.validCardNumber(number)) {
+    if (!Card.validCardNumber(number)) {
       throw new InvalidError(number);
     }
-    if (!this.validExpiredDate(expiredDate)) {
+    if (!Card.validExpiredDate(expiredDate)) {
       throw new InvalidError(expiredDate);
     }
-    if (!this.validBirthDay(birthDay)) {
+    if (!Card.validBirthDay(birthDay)) {
       throw new InvalidError(birthDay);
     }
 
@@ -79,11 +79,11 @@ class Card {
     );
   }
 
-  validCardNumber(number) {
+  static validCardNumber(number) {
     return number.length === Card.NUMBER_LENGTH && validNumberString(number);
   }
 
-  validExpiredDate(expired) {
+  static validExpiredDate(expired) {
     if (!expired.includes("/") || expired.length !== Card.EXPIRED_LENGTH) {
       return false;
     }
@@ -103,7 +103,7 @@ class Card {
     return isExpiredMonth && isExpiredYear;
   }
 
-  validBirthDay(birthDay) {
+  static validBirthDay(birthDay) {
     if (
       birthDay.length !== Card.BIRTH_DAY_LENGTH ||
       !validNumberString(birthDay)
