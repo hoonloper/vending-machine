@@ -113,6 +113,7 @@ class Card {
 
   static validBirthDay(birthDay) {
     if (
+      !validFilledString(birthDay) ||
       birthDay.length !== Card.BIRTH_DAY_LENGTH ||
       !validNumberString(birthDay)
     ) {
