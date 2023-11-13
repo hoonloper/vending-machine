@@ -4,7 +4,6 @@ const Cash = require("../../models/Cash");
 const { InvalidError } = require("../../common/CustomError");
 
 describe("음료 모델 테스트", () => {
-  const ALLOWED_CASH_LIST = [100, 500, 1_000, 5_000, 10_000];
   const PRICE = 10_000;
 
   describe("성공", () => {
@@ -68,6 +67,30 @@ describe("음료 모델 테스트", () => {
       assert.strictEqual(true, copyCash.getPrice() < cash.getPrice());
       cash.decreasePrice(PRICE);
       assert.strictEqual(copyCash.getPrice(), cash.getPrice());
+    });
+  });
+  describe("실패", () => {
+    let cash = null;
+    beforeEach(() => {
+      cash = new Cash(PRICE);
+    });
+
+    it("잘못된 생성자 주입", () => {
+      assert.throws(() => new Cash(null), InvalidError);
+      assert.throws(() => new Cash(-1), InvalidError);
+      assert.throws(() => new Cash("1000"), InvalidError);
+      assert.throws(() => new Cash(true), InvalidError);
+    });
+
+    it("현금이 모자랄 때", () => {
+      assert.throws(
+        () => cash.decreasePrice(Number.MAX_SAFE_INTEGER),
+        InvalidError
+      );
+    });
+
+    it("음료 인스턴스 검증", () => {
+      assert.strictEqual(false, Cash.isCash(new Error()));
     });
   });
 });
