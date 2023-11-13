@@ -15,6 +15,9 @@ class Cash {
     return this.#price;
   }
   increasePrice(price) {
+    if (!validStrictNumber(price) || price < 0) {
+      throw new InvalidError(price);
+    }
     this.#price += price;
   }
   decreasePrice(price) {
