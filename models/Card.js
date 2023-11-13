@@ -80,7 +80,7 @@ class Card {
   }
 
   static validCardNumber(number) {
-    return number.length === Card.NUMBER_LENGTH && validNumberString(number);
+    return validNumberString(number) && number.length === Card.NUMBER_LENGTH;
   }
 
   static validExpiredDate(expired) {
