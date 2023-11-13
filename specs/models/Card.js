@@ -1,7 +1,7 @@
 const { describe, it, beforeEach } = require("node:test");
 const assert = require("assert");
 const Card = require("../../models/Card");
-const { InvalidError, ServerError } = require("../../common/CustomError");
+const { InvalidError } = require("../../common/CustomError");
 
 describe("카드 모델 테스트", () => {
   const NUMBER_LENGTH = 16;
