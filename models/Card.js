@@ -1,5 +1,9 @@
 const { InvalidError } = require("../common/CustomError");
-const { validNumberString, validStrictNumber } = require("../common/utils");
+const {
+  validNumberString,
+  validStrictNumber,
+  validFilledString,
+} = require("../common/utils");
 
 class Card {
   static NUMBER_LENGTH = 16;
@@ -84,7 +88,11 @@ class Card {
   }
 
   static validExpiredDate(expired) {
-    if (!expired.includes("/") || expired.length !== Card.EXPIRED_LENGTH) {
+    if (
+      !validFilledString(expired) ||
+      !expired.includes("/") ||
+      expired.length !== Card.EXPIRED_LENGTH
+    ) {
       return false;
     }
     const [expiredMonth, expiredYear] = expired.split("/");
