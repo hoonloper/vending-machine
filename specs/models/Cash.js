@@ -3,7 +3,7 @@ const assert = require("assert");
 const Cash = require("../../models/Cash");
 const { InvalidError } = require("../../common/CustomError");
 
-describe("음료 모델 테스트", () => {
+describe("현금 모델 테스트", () => {
   const PRICE = 10_000;
 
   describe("성공", () => {
