@@ -1,6 +1,11 @@
 const readlineLib = require("readline");
 const Launcher = require("./Launcher");
-const { log, logs, logDivider } = require("./common/utils");
+const {
+  log,
+  logDivider,
+  addLineBreakOfTexts,
+  getLoggingDivider,
+} = require("./common/utils");
 const { STATUS, COMMAND } = require("./common/constant");
 const {
   ServerError,
@@ -56,23 +61,18 @@ class Application {
         status = launcher.run(command) ?? null;
 
         if (status === STATUS.COMPLETE) {
-          logs(
+          const completeMessage = addLineBreakOfTexts(
             LauncherLogger.getByeMessage(),
-            "\n",
             LauncherLogger.getReuseMessage()
           );
-          logDivider();
+          log(completeMessage);
         }
       } catch (error) {
-        logDivider(true);
-
-        if (checkCustomError(error)) {
-          error.logMessage();
-        } else {
-          logs("🚨 알 수 없는 에러입니다. 🚨", error);
-        }
-
-        logDivider(true);
+        const message = checkCustomError(error)
+          ? error.getMessage()
+          : "🚨 알 수 없는 에러입니다. 🚨";
+        const thinDivider = getLoggingDivider(true);
+        log(addLineBreakOfTexts(thinDivider, message, thinDivider));
       } finally {
         readline.prompt();
         return null;
@@ -88,8 +88,7 @@ class Application {
     // 종료
     const closeWithLog = (message) => {
       launcher.logUsageHistory();
-      logDivider();
-      log(message);
+      log(addLineBreakOfTexts(getLoggingDivider(), message));
       readline.close();
       return null;
     };
