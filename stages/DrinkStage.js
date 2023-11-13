@@ -2,7 +2,6 @@ const { InvalidError } = require("../common/CustomError");
 const { COMMAND } = require("../common/constant");
 const {
   log,
-  logDivider,
   getLoggingDivider,
   addLineBreakOfTexts,
 } = require("../common/utils");

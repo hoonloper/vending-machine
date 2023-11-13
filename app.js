@@ -2,7 +2,6 @@ const readlineLib = require("readline");
 const Launcher = require("./Launcher");
 const {
   log,
-  logDivider,
   addLineBreakOfTexts,
   getLoggingDivider,
 } = require("./common/utils");
@@ -105,7 +104,7 @@ class Application {
     const history = () => {
       launcher.logUsageHistory();
       LauncherLogger.logReuseMessage();
-      logDivider();
+      log(getLoggingDivider());
       return null;
     };
 

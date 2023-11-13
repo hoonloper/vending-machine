@@ -2,7 +2,6 @@ const { InvalidError, ServerError } = require("../common/CustomError");
 const { MODEL_KEY, STATUS, COMMAND } = require("../common/constant");
 const {
   log,
-  logDivider,
   getLoggingDivider,
   addLineBreakOfTexts,
 } = require("../common/utils");
@@ -137,9 +136,9 @@ class PaymentStage {
   #getDoneCashPaymentText(drinkPrice) {
     const cash = this.#getCash();
     if (!cash.checkPriceRange(drinkPrice)) {
-      logDivider();
-      log("🚨🚨🚨 금액 부족 🚨🚨🚨");
-      logDivider();
+      const divder = getLoggingDivider();
+      log(addLineBreakOfTexts(divder, "🚨🚨🚨 금액 부족 🚨🚨🚨", divder));
+
       throw new ServerError(drinkPrice);
     }
     cash.decreasePrice(drinkPrice);
