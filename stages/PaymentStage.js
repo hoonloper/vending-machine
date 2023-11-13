@@ -46,19 +46,20 @@ class PaymentStage {
     const paymentConfirm =
       "⭐️ 결제 내역을 꼭 확인해 주세요.\n결제 확정 - '진행'\n결제 종료 - '끝'";
 
-    const messages = [
-      divider,
-      paymentTitle,
-      thinDivider,
-      info,
-      thinDivider,
-      drinkText,
-      paymentHistoryText,
-      divider,
-      paymentConfirm,
-      divider,
-    ];
-    log(messages.join("\n"));
+    log(
+      addLineBreakOfTexts(
+        divider,
+        paymentTitle,
+        thinDivider,
+        info,
+        thinDivider,
+        drinkText,
+        paymentHistoryText,
+        divider,
+        paymentConfirm,
+        divider
+      )
+    );
   }
 
   #getCardPaymentText(drink) {
@@ -82,6 +83,7 @@ class PaymentStage {
     const cash = this.#getCash();
     const type = "- 타입: 현금";
     const price = `- 입력한 금액: ${cash.getPrice()}원`;
+
     return {
       info: addLineBreakOfTexts(type, price),
       change: `${cash.getPrice() - drink.getPrice()}`,
@@ -91,10 +93,15 @@ class PaymentStage {
 
   do(command) {
     if (command !== COMMAND.IN_PROGRESS) {
-      logDivider();
-      log("잘못된 입력입니다.");
-      log(`결제 진행 - '${COMMAND.IN_PROGRESS}', 끝내기 - '${COMMAND.END}'`);
-      logDivider();
+      const divider = getLoggingDivider();
+      const message = addLineBreakOfTexts(
+        divider,
+        `잘못된 입력입니다.\n결제 진행 - '${COMMAND.IN_PROGRESS}', 끝내기 - '${COMMAND.END}'`,
+        divider
+      );
+
+      log(message);
+
       return null;
     }
 
@@ -112,12 +119,12 @@ class PaymentStage {
         : () => "";
 
     drink.decreaseCount();
-    logDivider();
-    log("결제가 완료되었습니다.");
-    log("\n결제 내역");
-    log(`- 금액: ${drinkPrice}원`);
-    log(paymentText);
-    logDivider();
+
+    const divider = getLoggingDivider();
+    const doneText = `결제가 완료되었습니다.\n결제 내역\n- 금액: ${drinkPrice}원`;
+
+    log(addLineBreakOfTexts(divider, doneText, paymentText, divider));
+
     return STATUS.COMPLETE;
   }
 
