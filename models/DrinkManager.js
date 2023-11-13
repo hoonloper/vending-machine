@@ -1,9 +1,16 @@
+const { InvalidError } = require("../common/CustomError");
 const Drink = require("./Drink");
 
 class DrinkManager {
   #drinkList;
 
   constructor(drinkList = []) {
+    if (
+      !Array.isArray(drinkList) ||
+      (drinkList.length > 0 && !drinkList.every(Drink.isDrink))
+    ) {
+      throw new InvalidError(drinkList);
+    }
     this.#drinkList = drinkList;
     if (drinkList.length === 0) {
       this.#initDrinkList();
