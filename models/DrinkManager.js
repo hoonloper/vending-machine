@@ -6,12 +6,14 @@ class DrinkManager {
   constructor(drinkList = []) {
     this.#drinkList = drinkList;
     if (drinkList.length === 0) {
-      this.#addDrink("콜라", 1100, 3);
-      this.#addDrink("물", 600, 3);
-      this.#addDrink("커피", 700, 3);
+      this.#initDrinkList();
     }
   }
-
+  #initDrinkList() {
+    this.#addDrink("콜라", 1100, 3);
+    this.#addDrink("물", 600, 3);
+    this.#addDrink("커피", 700, 3);
+  }
   getDrinkList() {
     return this.#drinkList;
   }
