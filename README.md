@@ -6,11 +6,11 @@
 node ./app/App
 ```
 
-![시작화면](./image/screen.png)
+![시작화면](./images/screen.png)
 
 ### 🌊 흐름도
 
-![흐름도](./image/flow_chart.png)
+![흐름도](./images/flow_chart.png)
 
 ### 📁 폴더 구조
 
@@ -95,4 +95,4 @@ node --experimental-test-coverage ./specs/stages/PaymentStage.spec
 node --experimental-test-coverage ./specs/stages/StageManager.spec
 ```
 
-![테스트 달성률](./image/test_coverage.png)
+![테스트 달성률](./images/test_coverage.png)
