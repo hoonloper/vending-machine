@@ -86,10 +86,10 @@ class DrinkStage {
   }
 
   copy() {
-    const newDrinkManager = new DrinkManager();
-    newDrinkManager.setSelectedDrink(this.#getSelectedDrink());
+    const newDrinkStage = new DrinkStage();
+    newDrinkStage.setSelectedDrink(this.#getSelectedDrink());
 
-    return newDrinkManager;
+    return newDrinkStage;
   }
 }
 
