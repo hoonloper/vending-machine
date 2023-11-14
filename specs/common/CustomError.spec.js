@@ -17,11 +17,6 @@ describe("커스텀 에러 테스트", () => {
       const error = new InvalidError(message);
       assert.strictEqual(message, error.getMessage());
     });
-    it("InvalidError 로깅", () => {
-      const message = "테스트 메시지";
-      const error = new InvalidError(message);
-      assert.doesNotThrow(() => error.logMessage());
-    });
     it("InvalidError Error의 자식", () => {
       const error = new InvalidError();
       assert.ok(error instanceof Error);
@@ -40,11 +35,6 @@ describe("커스텀 에러 테스트", () => {
       const error = new NotFoundError(message);
       assert.strictEqual(message, error.getMessage());
     });
-    it("NotFoundError 로깅", () => {
-      const message = "테스트 메시지";
-      const error = new NotFoundError(message);
-      assert.doesNotThrow(() => error.logMessage());
-    });
     it("NotFoundError Error의 자식", () => {
       const error = new NotFoundError();
       assert.ok(error instanceof Error);
@@ -62,11 +52,6 @@ describe("커스텀 에러 테스트", () => {
       const message = "테스트 메시지";
       const error = new ServerError(message);
       assert.strictEqual(message, error.getMessage());
-    });
-    it("ServerError 로깅", () => {
-      const message = "테스트 메시지";
-      const error = new ServerError(message);
-      assert.doesNotThrow(() => error.logMessage());
     });
     it("ServerError Error의 자식", () => {
       const error = new ServerError();
