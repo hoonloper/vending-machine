@@ -1,7 +1,10 @@
-const { addLineBreakOfTexts, log } = require("./utils");
+const { addLineBreakOfTexts, log, validString } = require("./utils");
 
 class InvalidError extends Error {
   constructor(message = "") {
+    if (!validString(message)) {
+      throw new InvalidError("잘못된 메시지입니다.");
+    }
     super(message);
   }
   static isError(error) {
@@ -22,6 +25,9 @@ class InvalidError extends Error {
 }
 class NotFoundError extends Error {
   constructor(message = "") {
+    if (!validString(message)) {
+      throw new InvalidError("잘못된 메시지입니다.");
+    }
     super(message);
   }
   static isError(error) {
@@ -42,6 +48,9 @@ class NotFoundError extends Error {
 }
 class ServerError extends Error {
   constructor(message = "") {
+    if (!validString(message)) {
+      throw new InvalidError("잘못된 메시지입니다.");
+    }
     super(message);
   }
   static isError(error) {
