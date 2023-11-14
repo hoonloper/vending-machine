@@ -32,6 +32,8 @@ describe("런처 E2E 테스트", () => {
         status = launcher.run(command);
       }
       assert.strictEqual(STATUS.COMPLETE, status);
+      assert.doesNotThrow(() => launcher.logUsageHistory());
+      assert.doesNotThrow(() => launcher.newLauncher());
     });
     it("카드 결제 흐름", () => {
       let status = null;
@@ -40,6 +42,11 @@ describe("런처 E2E 테스트", () => {
         status = launcher.run(command);
       }
       assert.strictEqual(STATUS.COMPLETE, status);
+      assert.doesNotThrow(() => launcher.logUsageHistory());
+      assert.doesNotThrow(() => launcher.newLauncher());
+    });
+    it("결제 내역이 없을 때 log 출력", () => {
+      assert.strictEqual(undefined, launcher.logUsageHistory());
     });
   });
   todo("실패에 대한 예외는 많아서 여유 있을 때 작성");
