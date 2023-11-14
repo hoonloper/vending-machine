@@ -10,7 +10,7 @@ const STAGES = [
   "DrinkStage",
   "PaymentStage",
   "StageManager",
-].slice(0, 4); // 각 스테이지 테스트 코드 작성시 하나씩 풀기
+];
 const MODELS = ["Card", "Cash", "Drink", "DrinkManager"];
 const COMMON = ["CustomError", "utils"];
 
