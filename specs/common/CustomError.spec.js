@@ -50,5 +50,25 @@ describe("커스텀 에러 테스트", () => {
       assert.strictEqual(true, error instanceof Error);
     });
   });
-  describe("실패", () => {});
+
+  describe("실패", () => {
+    it("InvalidError 잘못된 생성자", () => {
+      assert.throws(() => new InvalidError(-1), InvalidError);
+      assert.throws(() => new InvalidError(true), InvalidError);
+      assert.throws(() => new InvalidError([]), InvalidError);
+      assert.throws(() => new InvalidError({}), InvalidError);
+    });
+    it("NotFoundError 잘못된 생성자", () => {
+      assert.throws(() => new NotFoundError(-1), InvalidError);
+      assert.throws(() => new NotFoundError(true), InvalidError);
+      assert.throws(() => new NotFoundError([])), InvalidError;
+      assert.throws(() => new NotFoundError({})), InvalidError;
+    });
+    it("ServerError 잘못된 생성자", () => {
+      assert.throws(() => new ServerError(-1), InvalidError);
+      assert.throws(() => new ServerError(true), InvalidError);
+      assert.throws(() => new ServerError([]), InvalidError);
+      assert.throws(() => new ServerError({}), InvalidError);
+    });
+  });
 });
