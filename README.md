@@ -35,11 +35,11 @@ node ./app/App
 │   │   ├── Drink.js 🟢
 │   │   └── DrinkManager.js 🟢
 │   └── stages
-│       ├── CardStage.js 🔴
-│       ├── CashStage.js 🔴
-│       ├── DrinkStage.js 🔴
-│       ├── PaymentStage.js 🔴
-│       └── StageManager.js 🔴
+│       ├── CardStage.js 🟢
+│       ├── CashStage.js 🟢
+│       ├── DrinkStage.js 🟢
+│       ├── PaymentStage.js 🟢
+│       └── StageManager.js 🟢
 └── specs (테스트)
     ├── Launcher.spec.js
     ├── LauncherLogger.spec.js
@@ -62,20 +62,37 @@ node ./app/App
 node --experimental-test-coverage ./specs/runner.spec
 ```
 
-**개별 테스트 실행 (common)**
+**런쳐 테스트 실행**
 
 ```bash
-node ./specs/common/CustomError.spec
-node ./specs/common/utils.spec
+node --experimental-test-coverage ./specs/Launcher.spec
+node --experimental-test-coverage ./specs/LauncherLogger.spec
 ```
 
-**개별 테스트 실행 (models)**
+**공용 테스트 실행 (common)**
 
 ```bash
-node ./specs/models/Card.spec
-node ./specs/models/Cash.spec
-node ./specs/models/Drink.spec
-node ./specs/models/DrinkManager.spec
+node --experimental-test-coverage ./specs/common/CustomError.spec
+node --experimental-test-coverage ./specs/common/utils.spec
+```
+
+**모델 테스트 실행 (models)**
+
+```bash
+node --experimental-test-coverage ./specs/models/Card.spec
+node --experimental-test-coverage ./specs/models/Cash.spec
+node --experimental-test-coverage ./specs/models/Drink.spec
+node --experimental-test-coverage ./specs/models/DrinkManager.spec
+```
+
+**스테이지 테스트 실행 (stages)**
+
+```bash
+node --experimental-test-coverage ./specs/stages/CardStage.spec
+node --experimental-test-coverage ./specs/stages/CashStage.spec
+node --experimental-test-coverage ./specs/stages/DrinkStage.spec
+node --experimental-test-coverage ./specs/stages/PaymentStage.spec
+node --experimental-test-coverage ./specs/stages/StageManager.spec
 ```
 
 ![테스트 달성률](./image/test_coverage.png)
