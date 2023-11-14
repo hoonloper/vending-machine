@@ -47,4 +47,20 @@ describe("현금 단계 테스트", () => {
       assert.strictEqual(true, copyCashStage !== cashStage);
     });
   });
+  describe("실패", () => {
+    let cashStage;
+    beforeEach(() => {
+      cashStage = new CashStage();
+    });
+    it("잘못된 현금을 입력했을 때", () => {
+      assert.throws(() => {
+        assert.strictEqual(null, cashStage.do(Number.MIN_SAFE_INTEGER));
+        assert.ok(Cash.isCash(cashStage.do(COMMAND.IN_PROGRESS)));
+      });
+      assert.throws(() => {
+        assert.strictEqual(null, cashStage.do(Number.MAX_SAFE_INTEGER));
+        assert.ok(Cash.isCash(cashStage.do(COMMAND.IN_PROGRESS)));
+      });
+    });
+  });
 });
