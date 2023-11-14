@@ -82,7 +82,9 @@ describe("현금 모델 테스트", () => {
       assert.throws(() => new Cash(true), InvalidError);
     });
 
-    it("현금이 모자랄 때", () => {
+    it("잘못된 현금을 입력했을 때", () => {
+      assert.throws(() => cash.increasePrice(-1), InvalidError);
+      assert.throws(() => cash.decreasePrice(-1), InvalidError);
       assert.throws(
         () => cash.decreasePrice(Number.MAX_SAFE_INTEGER),
         InvalidError
