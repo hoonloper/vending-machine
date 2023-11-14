@@ -59,7 +59,7 @@ class CardStage {
   }
 
   #retry() {
-    this.setCard(null);
+    this.#setCard(null);
 
     const divider = getLoggingDivider();
     log(addLineBreakOfTexts(divider, this.getMessage(), divider));
@@ -74,7 +74,7 @@ class CardStage {
     }
 
     const [number, expiredDate, birthDay] = command.split(":");
-    this.setCard(new Card(number, expiredDate, birthDay));
+    this.#setCard(new Card(number, expiredDate, birthDay));
 
     const divider = getLoggingDivider();
     const message = this.#done();
@@ -97,7 +97,7 @@ class CardStage {
 
   copy() {
     const newCardStage = new CardStage();
-    newCardStage.setCard(this.#getCard().copy());
+    newCardStage.#setCard(this.#getCard().copy());
 
     return newCardStage;
   }
@@ -105,7 +105,7 @@ class CardStage {
   #getCard() {
     return this.card;
   }
-  setCard(card) {
+  #setCard(card) {
     this.card = card;
   }
 }
