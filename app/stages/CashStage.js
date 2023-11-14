@@ -119,7 +119,7 @@ class CashStage {
     const newCashStage = new CashStage();
     newCashStage.#setCash(this.#getCash().copy());
 
-    return newCashStage();
+    return newCashStage;
   }
 }
 
