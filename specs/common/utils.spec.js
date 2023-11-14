@@ -8,7 +8,7 @@ const {
   validFilledString,
   validStrictNumber,
   validNumberString,
-} = require("../../common/utils");
+} = require("../../app/common/utils");
 
 describe("유틸 테스트", () => {
   describe("성공", () => {

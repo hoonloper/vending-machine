@@ -1,9 +1,12 @@
 const { describe, it, beforeEach } = require("node:test");
 const assert = require("assert");
-const DrinkManager = require("../../models/DrinkManager");
-const { InvalidError } = require("../../common/CustomError");
-const Drink = require("../../models/Drink");
-const { validStrictNumber, validFilledString } = require("../../common/utils");
+const DrinkManager = require("../../app/models/DrinkManager");
+const { InvalidError } = require("../../app/common/CustomError");
+const Drink = require("../../app/models/Drink");
+const {
+  validStrictNumber,
+  validFilledString,
+} = require("../../app/common/utils");
 
 describe("음료 매니저 모델 테스트", () => {
   const DRINK_LIST = [

@@ -1,7 +1,7 @@
 const { describe, it, beforeEach } = require("node:test");
 const assert = require("assert");
-const Cash = require("../../models/Cash");
-const { InvalidError } = require("../../common/CustomError");
+const Cash = require("../../app/models/Cash");
+const { InvalidError } = require("../../app/common/CustomError");
 
 describe("현금 모델 테스트", () => {
   const PRICE = 10_000;

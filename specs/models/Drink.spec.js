@@ -1,7 +1,7 @@
 const { describe, it, beforeEach } = require("node:test");
 const assert = require("assert");
-const Drink = require("../../models/Drink");
-const { InvalidError } = require("../../common/CustomError");
+const Drink = require("../../app/models/Drink");
+const { InvalidError } = require("../../app/common/CustomError");
 
 describe("음료 모델 테스트", () => {
   const NAME = "콜라";

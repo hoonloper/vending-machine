@@ -3,7 +3,7 @@ const {
   InvalidError,
   NotFoundError,
   ServerError,
-} = require("../../common/CustomError");
+} = require("../../app/common/CustomError");
 const assert = require("assert");
 
 describe("커스텀 에러 테스트", () => {
