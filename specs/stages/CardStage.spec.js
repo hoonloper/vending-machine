@@ -45,4 +45,10 @@ describe("카드 단계 테스트", () => {
       assert.strictEqual(true, copyCardStage !== cardStage);
     });
   });
+  describe("실패", () => {
+    it("잘못된 카드 번호를 입력했을 때", () => {
+      const cardStage = new CardStage();
+      assert.throws(() => cardStage.do(CARD_NUMBER + "123"));
+    });
+  });
 });
