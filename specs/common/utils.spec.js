@@ -1,6 +1,7 @@
 const assert = require("assert");
 const { describe, it } = require("node:test");
 const {
+  log,
   getLoggingDivider,
   addLineBreakOfTexts,
   validString,
@@ -12,6 +13,9 @@ const {
 
 describe("유틸 테스트", () => {
   describe("성공", () => {
+    it("로그 테스트", () => {
+      assert.doesNotThrow(() => log("로그 출력"));
+    });
     it("굵은 구분선 가져오기", () => {
       const divider =
         "\n============================================================================\n";
