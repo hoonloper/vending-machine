@@ -63,4 +63,49 @@ describe("유틸 테스트", () => {
       assert.ok(validNumberString(`${Number.MAX_SAFE_INTEGER}`));
     });
   });
+  describe("실패", () => {
+    it("문자열 타입 검증", () => {
+      assert.strictEqual(false, validString(1));
+      assert.strictEqual(false, validString(true));
+      assert.strictEqual(false, validString([]));
+      assert.strictEqual(false, validString({}));
+      assert.strictEqual(false, validString(null));
+      assert.strictEqual(false, validString(undefined));
+    });
+    it("채워진 문자열 검증", () => {
+      assert.strictEqual(false, validFilledString(""));
+      assert.strictEqual(false, validFilledString(1));
+      assert.strictEqual(false, validFilledString(true));
+      assert.strictEqual(false, validFilledString([]));
+      assert.strictEqual(false, validFilledString({}));
+      assert.strictEqual(false, validFilledString(null));
+      assert.strictEqual(false, validFilledString(undefined));
+    });
+    it("숫자 타입 검증", () => {
+      assert.strictEqual(false, validNumber(""));
+      assert.strictEqual(false, validNumber(true));
+      assert.strictEqual(false, validNumber([]));
+      assert.strictEqual(false, validNumber({}));
+      assert.strictEqual(false, validNumber(null));
+      assert.strictEqual(false, validNumber(undefined));
+    });
+    it("엄격한 숫자 타입 검증", () => {
+      assert.strictEqual(false, validStrictNumber(""));
+      assert.strictEqual(false, validStrictNumber(true));
+      assert.strictEqual(false, validStrictNumber([]));
+      assert.strictEqual(false, validStrictNumber({}));
+      assert.strictEqual(false, validStrictNumber(NaN));
+      assert.strictEqual(false, validStrictNumber(null));
+      assert.strictEqual(false, validStrictNumber(undefined));
+    });
+    it("숫자 문자열 검증", () => {
+      assert.strictEqual(false, validNumberString("123@"));
+      assert.strictEqual(false, validNumberString("한글"));
+      assert.strictEqual(false, validNumberString(true));
+      assert.strictEqual(false, validNumberString([]));
+      assert.strictEqual(false, validNumberString({}));
+      assert.strictEqual(false, validNumberString(null));
+      assert.strictEqual(false, validNumberString(undefined));
+    });
+  });
 });
