@@ -51,7 +51,13 @@ node ./app/App
     │   ├── Cash.spec.js
     │   ├── Drink.spec.js
     │   └── DrinkManager.spec.js
-    └── runner.spec.js
+    ├── runner.spec.js
+    └── stages
+        ├── CardStage.spec.js
+        ├── CashStage.spec.js
+        ├── DrinkStage.spec.js
+        ├── PaymentStage.spec.js
+        └── StageManager.spec.js
 ```
 
 ### 📊 테스트
